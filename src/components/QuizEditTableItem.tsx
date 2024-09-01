@@ -38,6 +38,10 @@ const QuizEditTableItem : React.FC<QuizEditTableProps> = ({questionTitle,onSave}
 		}		
 	}
     
+    /** クイズ詳細画面への遷移 */
+    const gotoQuizDetail = (questionTitle : QuestionTitle) => {
+        console.log(questionTitle.questionTitle);
+    }
 
     /** Itemごとの要素を作成 */
     return(
@@ -51,7 +55,7 @@ const QuizEditTableItem : React.FC<QuizEditTableProps> = ({questionTitle,onSave}
                 </div>
             ) : (
                 <div>
-                <label>{currentTitle}</label>
+                <label onClick={() => gotoQuizDetail(questionTitle)}>{currentTitle}</label>
                 &nbsp; <button onClick={handleEditClick}>edit</button>
                 &nbsp; <button onClick={() => handleDelteTitle(questionTitle)}>del</button>
                 </div>
