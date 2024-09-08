@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { QuestionTitle } from '../types/QuestionTitle';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import GoToHome from '../utils/GoToHome';
 
 const QuizForm: React.FC = () =>{
 	const navigate = useNavigate();
@@ -15,7 +16,10 @@ const QuizForm: React.FC = () =>{
 			questionTitle: ''}
 	);
 
-	/*フォームが入力されると呼ばれる */
+	/**
+	 * 変更したタイトルをオブジェクトに値を代入する関数
+	 * @param e 変更されたイベント
+	 */
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = e.target;
 		setQuestionTiltes({
@@ -24,11 +28,13 @@ const QuizForm: React.FC = () =>{
 		});
 	  };
 
-	 /** 編集した内容を送信  */
+	 /**
+	  * 問題のタイトルを変更するためにDBを更新する関数
+	  * @param e フォーム送信を押下したイベント
+	  */
 	 const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-		  // REST APIにデータを送信
 		  await axios.post('http://localhost:8080/quizrest/save', questionTitles);
 		  alert('Data submitted successfully!');
 		} catch (error) {
@@ -38,7 +44,7 @@ const QuizForm: React.FC = () =>{
 	  };
 
 	  
-	/* タイトル入力フォーム */
+	/* 問題のタイトルを変更するフォーム */
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
@@ -48,7 +54,7 @@ const QuizForm: React.FC = () =>{
 			</div>
 			<button type="submit">Submit</button>
 			</form>
-			<button onClick={goToHome}>Homeへ戻る</button>
+			<GoToHome/>
 		</div>
 
 	  );

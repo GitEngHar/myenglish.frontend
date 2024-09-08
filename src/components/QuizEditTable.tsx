@@ -8,7 +8,7 @@ const QuizEditTable : React.FC = () => {
     const [questionTitles,setQuestionTitles] = useState<QuestionTitle[]>([]);
     const [error,setError] = useState('');
 
-    	/* RESTAPI 問題のタイトルを取得 */
+    /* RESTAPI 問題のタイトルを取得 */
 	useEffect(() => {
         axios.get<QuestionTitle[]>('http://localhost:8080/quizrest')
             .then(response => setQuestionTitles(response.data))
