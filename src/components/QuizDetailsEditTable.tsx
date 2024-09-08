@@ -8,16 +8,7 @@ const QuizEditTable : React.FC = () => {
     const [questionTitles,setQuestionTitles] = useState<QuestionTitle[]>([]);
     const [error,setError] = useState('');
 
-    /* RESTAPI 問題のタイトルを取得 */
-	useEffect(() => {
-        axios.get<QuestionTitle[]>('http://localhost:8080/quizrest')
-            .then(response => setQuestionTitles(response.data))
-            .catch(error => {
-                console.error('rest error ' , error);
-                setError('Failed to load items.');
-            });
-        },[])
-
+    // TODO: クイズ詳細ごとに削除機能作成
     const handleSave = (index :number ,newQuestionTitle :string) => {
         const newQuestionTitles = [...questionTitles];
         newQuestionTitles[index].questionTitle = newQuestionTitle;

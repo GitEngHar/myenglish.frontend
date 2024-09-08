@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 	
 
 const Quiz: React.FC = () =>{
-	/* QuizFormへの遷移宣言 */
 	const navigate = useNavigate();
 	const goToQuizForm = () => {
 		navigate('/quiz/form');
 	}
 
+	/** 問題タイトルページ */
 	return (
 		<div>
 			<h1>Question List</h1>

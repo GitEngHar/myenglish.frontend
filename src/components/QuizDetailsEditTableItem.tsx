@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { QuestionTitle } from '../types/QuestionTitle';
-import { QuestionDetails } from '../types/QuestionDetails';
-import { useNavigate } from 'react-router-dom';
 
 interface QuizEditTableProps {
     questionTitle : QuestionTitle,
@@ -10,35 +8,25 @@ interface QuizEditTableProps {
 }
 
 const QuizEditTableItem : React.FC<QuizEditTableProps> = ({questionTitle,onSave}) => {
-    
+    /** 編集状態 と 編集内容を保持する*/
     const [currentTitle,setCurrentTitle] = useState(questionTitle.questionTitle);
     const [isEditing,setIsEditing] = useState(false);
-    const [questionDetails,setQuestionDetails] = useState<QuestionDetails[]>([]);
-    const navigate = useNavigate();
-
-	// クイズタイトルを編集可能にする関数
+	/**クリックで編集にするアクション */
 	const handleEditClick = () => {
 		setIsEditing(true);
 	}
 
-	// クイズタイトルを編集不可能にする関数
+	/**クリックで編集モードではなくなるアクション */
 	const handleSaveClick = () => {
 		setIsEditing(false);
         onSave(currentTitle);
 	}
 
-    /**
-     * クイズタイトルのオブジェクトを変更する関数
-     * @param e TODO: 記載する
-     */
     const changeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCurrentTitle(e.target.value);
     }
 
-    /**
-     * クイズタイトルを削除するための関数	
-     * @param questionTitle 削除するクイズタイトル
-     */
+    /** RESTAPI 問題のタイトルを削除 */	
 	const handleDelteTitle = async (questionTitle: QuestionTitle) => {
 		try {
 		  // REST APIにデータを送信
@@ -49,18 +37,13 @@ const QuizEditTableItem : React.FC<QuizEditTableProps> = ({questionTitle,onSave}
 		  alert('Failed to submit data.');
 		}		
 	}
-
-
-    /**
-     * クイズタイトルに紐づくクイズ詳細情報を取得する関数
-     * @param questionTitle クイズタイトル
-     */
-    const handleGotoQuizDetail =  (questionTitle : QuestionTitle) => {
-        navigate("/quizdetails",{state: {questionTitle:questionTitle}})
+    
+    /** クイズ詳細画面への遷移 */
+    const gotoQuizDetail = (questionTitle : QuestionTitle) => {
+        console.log(questionTitle.questionTitle);
     }
 
-
-    /** クイズタイトルを作成する */
+    /** Itemごとの要素を作成 */
     return(
         <li>
             
@@ -72,7 +55,7 @@ const QuizEditTableItem : React.FC<QuizEditTableProps> = ({questionTitle,onSave}
                 </div>
             ) : (
                 <div>
-                <label onClick={() => handleGotoQuizDetail(questionTitle)}>{currentTitle}</label>
+                <label onClick={() => gotoQuizDetail(questionTitle)}>{currentTitle}</label>
                 &nbsp; <button onClick={handleEditClick}>edit</button>
                 &nbsp; <button onClick={() => handleDelteTitle(questionTitle)}>del</button>
                 </div>
