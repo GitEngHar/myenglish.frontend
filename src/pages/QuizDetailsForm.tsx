@@ -52,7 +52,6 @@ const QuizDetailsForm: React.FC = () =>{
 		  [name]: value,
 		  ["questionTitleId"]: questionTitle.questionTitleId
 		});
-		handleQuestionDetailsWrapper();
 	  };
 
 	/**
@@ -67,25 +66,27 @@ const QuizDetailsForm: React.FC = () =>{
 		  ["questionDetailsId"]: questionDetails.questionDetailsId,
 		  ["questionTitleId"]: questionTitle.questionTitleId
 		});
-		handleQuestionDetailsWrapper();
+		
 	};
-	const handleQuestionDetailsWrapper = 
-		() => setQuestionDetailsWrapper(
+
+	useEffect(() => {
+		console.log(questionAnswer);
+		setQuestionDetailsWrapper(
 			{
 				...questionDetailsWrapper,
 				["myEnglishQuizDetailsForm"]: questionDetails,
 				["myEnglishQuizAnswerForm"]: questionAnswer
-			}
-		)
+			})
+	},[questionAnswer,questionDetails])
+
 
 	/** 編集した内容を送信  */
 	const postQuestionDetailsWrapper = async(e: React.FormEvent) => {
 		try{
-			// e.preventDefault();
+			//e.preventDefault();
 			if(questionDetailsWrapper.myEnglishQuizDetailsForm.questionTitleId > 0){
 				console.log(questionDetailsWrapper);
 				axios.post("http://localhost:8080/quizdetailsrest/save",questionDetailsWrapper)
-				alert("success");
 			}
 		}catch(error){
 			alert(error);
