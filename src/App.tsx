@@ -6,6 +6,7 @@ import QuizForm from './pages/QuizForm';
 import QuizDetails from './pages/QuizDetails';
 import QuizDetailsForm from './pages/QuizDetailsForm';	
 import TakeQuiz from './pages/TakeQuiz';
+import QuizDetailsEditForm from "./pages/QuizDetailsEditForm";
 
 
 const App: React.FC = () =>{
@@ -16,7 +17,9 @@ const App: React.FC = () =>{
         <Route path="/quiz/form" element={<QuizForm />}></Route>
         <Route path="/quizdetails" element={<QuizDetails />}></Route>
         <Route path="/quizdetails/form" element={<QuizDetailsForm />}></Route>
+        <Route path="/quizdetails/edit" element={<QuizDetailsEditForm />}></Route>
         <Route path="/takequiz/" element={<TakeQuiz />}></Route>
+
       </Routes>
     </Router>
   )
