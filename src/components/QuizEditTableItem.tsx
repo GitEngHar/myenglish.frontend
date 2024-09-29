@@ -13,7 +13,6 @@ const QuizEditTableItem : React.FC<QuizEditTableProps> = ({questionTitle,onSave}
     
     const [currentTitle,setCurrentTitle] = useState(questionTitle.questionTitle);
     const [isEditing,setIsEditing] = useState(false);
-    const [questionDetails,setQuestionDetails] = useState<QuestionDetails[]>([]);
     const navigate = useNavigate();
 
 	// クイズタイトルを編集可能にする関数
