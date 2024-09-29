@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { QuestionDetails } from '../types/QuestionDetails';
 import { QuestionAnswer } from '../types/QuestionAnswer';
+import { QuestionTitle } from '../types/QuestionTitle';
 import { QuestionDetailsWrapper } from '../types/QuestionDetailsWrapper';
-import QuizEditTableItem from '../components/QuizEditTableItem';
 import { useNavigate, useLocation } from 'react-router-dom';
+import BackToQuizDetails from "../utils/BackToQuizDetails";
 
 const QuizEditTable : React.FC = () => {
     const location = useLocation();
@@ -28,8 +29,7 @@ const QuizEditTable : React.FC = () => {
             myEnglishQuizAnswerForm : questionAnswer
         }
     );
-    const [error,setError] = useState('');
-
+    let titleId:number = questionDetails.questionTitleId;
     // Serverから問題に紐づく答えを取得
     useEffect(() => {
         const getQuestionDetailAnswer = async() => {
@@ -102,6 +102,9 @@ const QuizEditTable : React.FC = () => {
                     <input type="number" name="answerId" value={questionAnswer.answerId} onChange={handleQuestionAnswerChange}></input><br/><br/>
                 </div>
                 <button type="submit">Submit</button>
+                <BackToQuizDetails
+                    titleId={titleId}
+                />
             </form>
         </div>
     )

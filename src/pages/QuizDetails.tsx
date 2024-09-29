@@ -12,6 +12,9 @@ const QuizDetails: React.FC = () =>{
 
 	const {questionTitle} = location.state || {questionTitle : []};
 	const [questionDetails,setQuestionDetails] = useState<QuestionDetails[]>([]);
+	let questionTitleIdKeyName : string = "questionTitle-"+questionTitle.questionTitleId
+	console.log("key=",questionTitleIdKeyName);
+	localStorage.setItem(questionTitleIdKeyName,JSON.stringify(questionTitle));
 
 	// クイズ開始処理
 	const goToTakeQuiz = () => {

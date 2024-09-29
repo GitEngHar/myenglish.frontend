@@ -5,11 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import GoToHome from '../utils/GoToHome';
 
 const QuizForm: React.FC = () =>{
-	const navigate = useNavigate();
-	const goToHome = () => {
-		navigate('/');
-	}
-
 	const [questionTitles,setQuestionTiltes] = useState<QuestionTitle>(
 		{	questionTitleId: 0,
 			ownerUserId: 1,
