@@ -50,7 +50,7 @@ const QuizDetails: React.FC = () =>{
 		const response = await axios.post(
 			'http://localhost:8080/quizdetailsrest/delete',details
 		);
-		console.log(response);
+		window.location.reload();
 	}
 
 
