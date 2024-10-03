@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { QuestionTitle } from '../types/QuestionTitle';
-import { QuestionDetails } from '../types/QuestionDetails';
 import { useNavigate } from 'react-router-dom';
+import { questionTitleDelete } from '../features/myenglish/MyEnglishAPI';
+
 
 interface QuizEditTableProps {
     questionTitle : QuestionTitle,
@@ -41,8 +41,8 @@ const QuizEditTableItem : React.FC<QuizEditTableProps> = ({questionTitle,onSave}
 	const handleDelteTitle = async (questionTitle: QuestionTitle) => {
 		try {
 		  // REST APIにデータを送信
-		  await axios.post('http://localhost:8080/quizrest/delete', questionTitle);
-		  alert('Data submitted successfully!');
+		  const response = await questionTitleDelete(questionTitle);
+          alert('Data submitted successfully!');
 		} catch (error) {
 		  console.error('Error submitting data', error);
 		  alert('Failed to submit data.');

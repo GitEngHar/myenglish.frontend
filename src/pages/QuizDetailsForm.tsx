@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import {QuestionAnswer} from '../types/QuestionAnswer';
 import {QuestionDetails} from '../types/QuestionDetails';
 import {QuestionDetailsWrapper} from '../types/QuestionDetailsWrapper';
-import GoToHome from '../utils/GoToHome';
+import GoToHome from '../components/GoToHome';
+import { questionDetailsSave } from '../features/myenglish/MyEnglishAPI';
 
 const QuizDetailsForm: React.FC = () =>{
-	const navigate = useNavigate();
 	const location = useLocation();
 	const {questionTitle} = location.state || {questionTitle : []};
 	const [questionAnswer,setQuestionAnswer] = useState<QuestionAnswer>(
@@ -35,11 +34,6 @@ const QuizDetailsForm: React.FC = () =>{
 			myEnglishQuizAnswerForm : questionAnswer,
 		}
 	);
-
-	/**トップ画面に戻る関数 */
-	const goToHome = () => {
-		navigate('/');
-	};
 
 	/**
 	 * クイズの中身を変更する関数
@@ -83,10 +77,11 @@ const QuizDetailsForm: React.FC = () =>{
 	/** 編集した内容を送信  */
 	const postQuestionDetailsWrapper = async(e: React.FormEvent) => {
 		try{
-			//e.preventDefault();
+			e.preventDefault();
+			console.log(questionDetailsWrapper.myEnglishQuizDetailsForm.questionTitleId);
 			if(questionDetailsWrapper.myEnglishQuizDetailsForm.questionTitleId > 0){
-				console.log(questionDetailsWrapper);
-				axios.post("http://localhost:8080/quizdetailsrest/save",questionDetailsWrapper)
+				const response = questionDetailsSave(questionDetailsWrapper);
+				console.log(response);
 			}
 		}catch(error){
 			alert(error);

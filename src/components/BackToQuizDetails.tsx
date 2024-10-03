@@ -1,6 +1,4 @@
-import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import {QuestionDetails} from "../types/QuestionDetails";
 import {QuestionTitle} from "../types/QuestionTitle";
 
 interface titleIdProps{
@@ -9,7 +7,6 @@ interface titleIdProps{
 
 const BackToQuizDetails: React.FC<titleIdProps> = ({titleId}) =>{
     const navigate = useNavigate();
-    console.log('questionTitle-' + titleId)
     const localStorageQuestionTitle = localStorage.getItem('questionTitle-' + titleId);
 
     const backToHome = () => {

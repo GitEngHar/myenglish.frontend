@@ -1,20 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import {getOpenAIResponse} from '../features/open-ai/OpenAIService';
+import React, { useState, useEffect } from 'react'
+import {OpenAIService} from '../utils/OpenAIService';
+import {useLocation} from "react-router-dom";
+import BackToQuizDetails from "../components/BackToQuizDetails";
 
 const AIQuiz: React.FC = () =>{
 	const [input, setInput] = useState('');
 	const [response, setResponse] = useState('');
 	const [image, setImage] = useState<File | null>(null);
 	const [base64Image, setBase64Image] = useState<string[]>([]);
+	const location = useLocation();
+	const {questionTitle} = location.state || {questionTitle : []};
 
+	/* クイズを生成 */
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		const aiResponse = await getOpenAIResponse(base64Image);
-		setResponse(aiResponse);
+		let openAIService = new OpenAIService();
+		const aiResponse = await openAIService.generateAIQuestion(base64Image,questionTitle);
 		setResponse(aiResponse);
 	};
 
-
+	/* 画像を選択 */
 	const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) =>{
 		const files = e.target.files;
 		const reader = new FileReader();
@@ -80,6 +85,7 @@ const AIQuiz: React.FC = () =>{
 			<div>
 				<p>{response}</p>
 			</div>
+			<BackToQuizDetails titleId={questionTitle.questionTitleId}/>
 		</div>
 	)
 
