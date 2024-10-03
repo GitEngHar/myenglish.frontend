@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { QuestionDetails } from '../types/QuestionDetails';
 import { QuestionAnswer } from '../types/QuestionAnswer';
-import { QuestionTitle } from '../types/QuestionTitle';
 import { QuestionDetailsWrapper } from '../types/QuestionDetailsWrapper';
 import { useNavigate, useLocation } from 'react-router-dom';
-import BackToQuizDetails from "../utils/BackToQuizDetails";
+import BackToQuizDetails from "../components/BackToQuizDetails";
+import { questionDetailsEdit,questionDetailsUpdate } from '../features/myenglish/MyEnglishAPI';
 
 const QuizEditTable : React.FC = () => {
     const location = useLocation();
@@ -35,9 +34,9 @@ const QuizEditTable : React.FC = () => {
         const getQuestionDetailAnswer = async() => {
             try{
                 // データセットを取得する
-                const response = await axios.post("http://localhost:8080/quizdetailsrest/edit",questionDetails);
+                const response = await questionDetailsEdit(questionDetails);
                 // 答えのオブジェクトへ値を代入する
-                setQuestionAnswer(response.data);
+                setQuestionAnswer(response);
             }catch(error){
                 alert(error);
             }
@@ -83,7 +82,8 @@ const QuizEditTable : React.FC = () => {
 	const postQuestionDetailsWrapper = async(e: React.FormEvent) => {
 		try{
             e.preventDefault();
-            const response = await axios.post("http://localhost:8080/quizdetailsrest/update",questionDetailsWrapper)
+            const response = await questionDetailsUpdate(questionDetailsWrapper)
+            console.log(response);
         }catch(error){
 			alert(error);
 		}

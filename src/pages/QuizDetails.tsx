@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {QuestionDetails} from '../types/QuestionDetails';
-import QuizDetailsEditTable from './QuizDetailsEditForm';
+
+import {questionDetailsDelete, questionDetailsGet} from '../features/myenglish/MyEnglishAPI';
+
 import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
-import GoToHome from '../utils/GoToHome';
+import GoToHome from '../components/GoToHome';
 
 const QuizDetails: React.FC = () =>{
 	/* QuizDetailsFormへの遷移宣言 */
@@ -27,10 +28,8 @@ const QuizDetails: React.FC = () =>{
 	 useEffect(() => {
 		const postQuestionTitle = async() => {
 			try{
-				const response = await axios.post(
-					'http://localhost:8080/quizdetailsrest/',questionTitle
-				);
-				setQuestionDetails(response.data);
+				const response = await questionDetailsGet(questionTitle)
+				setQuestionDetails(response);
 			}
 			catch(error){
 				alert(error);
@@ -45,14 +44,17 @@ const QuizDetails: React.FC = () =>{
 		navigate('/quizdetails/form',{state : {questionTitle : questionTitle}});
 	}
 
+	const handleGotoAIQuiz =
+		() => {
+			navigate('/ai',{state : {questionTitle : questionTitle}});
+		}
+
 	const handleEditClick = (details : QuestionDetails) =>{
 		navigate('/quizdetails/edit',{state : {questionDetails : details}});
 	}
 
 	const handleDeleteClick = async(details : QuestionDetails) =>{
-		const response = await axios.post(
-			'http://localhost:8080/quizdetailsrest/delete',details
-		);
+		const response = await questionDetailsDelete(details);
 		window.location.reload();
 	}
 
@@ -73,6 +75,7 @@ const QuizDetails: React.FC = () =>{
 			}
 			<p>
 				<button onClick={handleGotoQuizDetailsForm}>Add</button>
+				<button onClick={handleGotoAIQuiz}>AI-Add</button>
 				<button onClick={goToTakeQuiz}>Start</button>
 			</p>
 			<GoToHome/>

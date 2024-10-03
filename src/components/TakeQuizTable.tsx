@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-// import './index.css';
-import axios from 'axios';
-import GoToHome from '../utils/GoToHome';
-import { QuestionTitle } from '../types/QuestionTitle';
+import GoToHome from './GoToHome';
 import { useLocation } from 'react-router-dom';
 import {QuestionAnswer} from '../types/QuestionAnswer';
 import {QuestionDetails} from '../types/QuestionDetails';
 import {QuestionDetailsWrapper} from '../types/QuestionDetailsWrapper';
+import {takeQuizGet} from "../features/myenglish/MyEnglishAPI";
 
 
 const TakeQuizTable: React.FC = () =>{
@@ -41,11 +39,11 @@ const TakeQuizTable: React.FC = () =>{
 	const getQuestionDetailsWrapper = async() => {
 		try{
 			// データセットを取得する
-			const response = await axios.post("http://localhost:8080/takequizrest/",questionTitle).then();
+			const response = await takeQuizGet(questionTitle);
 			// Wrapperのリストへ代入する
-			setQuestionDetailsWrapperList(response.data);
-            setQuestionAnswer(response.data[count].myEnglishQuizAnswerForm);
-            setQuestionDetails(response.data[count].myEnglishQuizDetailsForm);
+			setQuestionDetailsWrapperList(response);
+            setQuestionAnswer(response[count].myEnglishQuizAnswerForm);
+            setQuestionDetails(response[count].myEnglishQuizDetailsForm);
 		}catch(error){
 			alert(error);
 		}

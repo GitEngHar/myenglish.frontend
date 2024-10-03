@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { QuestionTitle } from '../types/QuestionTitle';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import GoToHome from '../utils/GoToHome';
+import { questionTitleSave } from '../features/myenglish/MyEnglishAPI';
+import GoToHome from '../components/GoToHome';
 
 const QuizForm: React.FC = () =>{
-	const [questionTitles,setQuestionTiltes] = useState<QuestionTitle>(
+	const [questionTitle,setQuestionTilte] = useState<QuestionTitle>(
 		{	questionTitleId: 0,
 			ownerUserId: 1,
 			questionTitle: ''}
@@ -17,8 +16,8 @@ const QuizForm: React.FC = () =>{
 	 */
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = e.target;
-		setQuestionTiltes({
-		  ...questionTitles,
+		setQuestionTilte({
+		  ...questionTitle,
 		  [name]: value
 		});
 	  };
@@ -29,13 +28,7 @@ const QuizForm: React.FC = () =>{
 	  */
 	 const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		try {
-		  await axios.post('http://localhost:8080/quizrest/save', questionTitles);
-		  alert('Data submitted successfully!');
-		} catch (error) {
-		  console.error('Error submitting data', error);
-		  alert('Failed to submit data.');
-		}
+		await questionTitleSave(questionTitle);
 	  };
 
 	  
@@ -45,7 +38,7 @@ const QuizForm: React.FC = () =>{
 			<form onSubmit={handleSubmit}>
 			<div>
 				<label>Title:</label>
-				<input type="text" name="questionTitle" value={questionTitles.questionTitle} onChange={handleChange} />
+				<input type="text" name="questionTitle" value={questionTitle.questionTitle} onChange={handleChange} />
 			</div>
 			<button type="submit">Submit</button>
 			</form>
