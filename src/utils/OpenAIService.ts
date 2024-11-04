@@ -2,7 +2,7 @@ import {QuestionDetailsWrapper} from '../types/QuestionDetailsWrapper'
 import {QuestionDetails} from '../types/QuestionDetails'
 import {QuestionAnswer} from '../types/QuestionAnswer'
 import {QuestionTitle} from '../types/QuestionTitle'
-import {getOpenAIResponse} from '../features/open-ai/OpenAIAPI';
+import {generateOpenAITextToQuiz, getOpenAIImagetoTextResponse} from '../features/open-ai/OpenAIAPI';
 import {questionDetailsSave} from '../features/myenglish/MyEnglishAPI'
 /* OpenAIに関連する機能 */
 export class OpenAIService {
@@ -19,7 +19,7 @@ export class OpenAIService {
      private convertAIDataToWrapper(responseAIData:string,questionTiltleId:number): QuestionDetailsWrapper | null{
         console.log(responseAIData)
         //正規表現で文字列を抜き出す
-        const questionWordMatch = responseAIData.match(/^問題:\s*([\s\S]*?)\s*選択肢:/);
+        const questionWordMatch = responseAIData.match(/^問題:\s*([\s\S]*?)\s*1./);
         const answerCandidateNo1Match  = responseAIData.match(/1.\s*([\s\S]*?)\s*2./);
         const answerCandidateNo2Match  = responseAIData.match(/2.\s*([\s\S]*?)\s*3./);
         const answerCandidateNo3Match  = responseAIData.match(/3.\s*([\s\S]*?)\s*4./);
@@ -93,15 +93,20 @@ export class OpenAIService {
     }
 
     async generateAIQuestion (base64Image:string[],questionTitle:QuestionTitle): Promise<string>{
-        let responseAIData : string = await getOpenAIResponse(base64Image);
+        // 画像を解析して日本語で出力する
+        let imageDescriptionJP : string = await getOpenAIImagetoTextResponse(base64Image);
+        console.log(imageDescriptionJP);
+        // 日本語の出力から問題文を作成する
+        let generatedQuiz : string = await generateOpenAITextToQuiz(imageDescriptionJP);
+        console.log(imageDescriptionJP);
         // データを登録
-        const questionDetailsWrapper = this.convertAIDataToWrapper(responseAIData,questionTitle.questionTitleId);
+        const questionDetailsWrapper = this.convertAIDataToWrapper(generatedQuiz,questionTitle.questionTitleId);
         if (questionDetailsWrapper != null){
             await questionDetailsSave(questionDetailsWrapper);
         }else{
             console.log("データ登録を回避")
         }
-        return responseAIData;
+        return generatedQuiz;
     }
 
 }
