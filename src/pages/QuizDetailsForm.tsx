@@ -1,18 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import GoToHome from '../components/GoToHome';
+import { questionDetailsSave } from '../features/myenglish/MyEnglishAPI';
+import {useForm} from 'react-hook-form'
 import {QuestionAnswer} from '../types/QuestionAnswer';
 import {QuestionDetails} from '../types/QuestionDetails';
 import {QuestionDetailsWrapper} from '../types/QuestionDetailsWrapper';
-import GoToHome from '../components/GoToHome';
-import { questionDetailsSave } from '../features/myenglish/MyEnglishAPI';
+
 
 const QuizDetailsForm: React.FC = () =>{
+	const {register, handleSubmit, formState: {errors}} = useForm(
+		{
+			// Formのデフォルト値
+			defaultValues: {
+				questionWord: "",
+				answerCandidateNo1: "",
+				answerCandidateNo2: "",
+				answerCandidateNo3: "",
+				answerCandidateNo4: "",
+				answerId: ""
+			}
+		}
+	);
+
+	//入力と同時にレンダリングされ idを指定できる
+	//const questionWord = watch("questionWord");
+
 	const location = useLocation();
 	const {questionTitle} = location.state || {questionTitle : []};
-	const [questionAnswer,setQuestionAnswer] = useState<QuestionAnswer>(
+	const [questionAnswer] = useState<QuestionAnswer>(
 		{
 			questionAnswerId: 0,
-			questionTitleId : 0,
+			questionTitleId : questionTitle.questionTitleId,
 			questionDetailsId : 0,
 			answerId : 0,
 			answerCandidateNo1 : "",
@@ -21,66 +40,47 @@ const QuizDetailsForm: React.FC = () =>{
 			answerCandidateNo4 : ""
 		}
 	);
-	const [questionDetails,setQuestionDetails] = useState<QuestionDetails>(
+	const [questionDetails] = useState<QuestionDetails>(
 		{
 			questionDetailsId : 0,
-			questionTitleId : 0,
+			questionTitleId : questionTitle.questionTitleId,
 			questionWord : ""
 		}
 	);
-	const [questionDetailsWrapper,setQuestionDetailsWrapper] = useState<QuestionDetailsWrapper>(
+	const [questionDetailsWrapper] = useState<QuestionDetailsWrapper>(
 		{
 			myEnglishQuizDetailsForm: questionDetails,
 			myEnglishQuizAnswerForm : questionAnswer,
 		}
 	);
 
-	/**
-	 * クイズの中身を変更する関数
-	 * @param e 
-	 */
-	const handleQuizDetailsChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const { name, value } = e.target;
-		setQuestionDetails({
-		  ...questionDetails,
-		  [name]: value,
-		  ["questionTitleId"]: questionTitle.questionTitleId
-		});
-	  };
-
-	/**
-	 * クイズ答えの中身を変更する関数
-	 * @param e 
-	 */
-	const handleQuizAnswerChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const { name, value } = e.target;
-		setQuestionAnswer({
-		  ...questionAnswer,
-		  [name]: value,
-		  ["questionDetailsId"]: questionDetails.questionDetailsId,
-		  ["questionTitleId"]: questionTitle.questionTitleId
-		});
-		
-	};
-
-	useEffect(() => {
-		console.log(questionAnswer);
-		setQuestionDetailsWrapper(
-			{
-				...questionDetailsWrapper,
-				["myEnglishQuizDetailsForm"]: questionDetails,
-				["myEnglishQuizAnswerForm"]: questionAnswer
-			})
-	},[questionAnswer,questionDetails])
-
-
 	/** 編集した内容を送信  */
-	const postQuestionDetailsWrapper = async(e: React.FormEvent) => {
+	const postQuestionDetailsWrapper = async(data:any) => {
 		try{
-			e.preventDefault();
-			console.log(questionDetailsWrapper.myEnglishQuizDetailsForm.questionTitleId);
+			//useStatの場合 非同期で値を更新することで最新の値が取得できないため constで静的な宣言で値を更新する
+			const updateQuestionDetails = ({
+				...questionDetails,
+				["questionWord"]: data["questionWord"]
+			});
+
+			const updateQuestionAnswer = ({
+				...questionAnswer,
+				["answerCandidateNo1"]: data["answerCandidateNo1"],
+				["answerCandidateNo2"]: data["answerCandidateNo2"],
+				["answerCandidateNo3"]: data["answerCandidateNo3"],
+				["answerCandidateNo4"]: data["answerCandidateNo4"],
+				["answerId"]: 1,
+				["questionDetailsId"]: questionDetails.questionDetailsId,
+				["questionTitleId"]: questionTitle.questionTitleId
+			});
+			const updateQuestionDetailsWrapper = (
+				{
+					...questionDetailsWrapper,
+					["myEnglishQuizDetailsForm"]: updateQuestionDetails,
+					["myEnglishQuizAnswerForm"]: updateQuestionAnswer
+			})
 			if(questionDetailsWrapper.myEnglishQuizDetailsForm.questionTitleId > 0){
-				const response = questionDetailsSave(questionDetailsWrapper);
+				const response = questionDetailsSave(updateQuestionDetailsWrapper);
 				console.log(response);
 			}
 		}catch(error){
@@ -91,32 +91,57 @@ const QuizDetailsForm: React.FC = () =>{
 	/* タイトル入力フォーム */
 	return (
 		<div>
-			<form onSubmit={postQuestionDetailsWrapper}>
-			<div>
-				<p>
-					Title: 
-					<input type="text" name="questionWord" value={questionDetails.questionWord} onChange={handleQuizDetailsChange} />
-				</p>
-				<p>
-					CandidateNo1:
-					<input type="text" name="answerCandidateNo1" value={questionAnswer.answerCandidateNo1} onChange={handleQuizAnswerChange}></input>
-				</p>
-				<p>
-					CandidateNo2:
-					<input type="text" name="answerCandidateNo2" value={questionAnswer.answerCandidateNo2} onChange={handleQuizAnswerChange}></input>
-				</p>
-				<p>
-					CandidateNo3:
-					<input type="text" name="answerCandidateNo3" value={questionAnswer.answerCandidateNo3} onChange={handleQuizAnswerChange}></input>
-				</p>
-				<p>CandidateNo4:
-					<input type="text" name="answerCandidateNo4" value={questionAnswer.answerCandidateNo4} onChange={handleQuizAnswerChange}></input>
-				</p>
-				<p>AnswerNo:
-					<input type="number" name="answerId" value={questionAnswer.answerId} onChange={handleQuizAnswerChange}></input>
-				</p>
-			</div>
-			<button type="submit">Submit</button>
+			<form onSubmit={handleSubmit((data) => {
+				postQuestionDetailsWrapper(data);
+			})}>
+				<div>
+					<p>
+						Title:
+						<input {...register("questionWord", {
+							required: 'This is required',
+							minLength: {
+								value: 4,
+								message: "Min 4"
+							}
+						})} />
+					</p>
+					<p>{errors.questionWord?.message}</p>
+					<p>
+						CandidateNo1:
+						<input {...register("answerCandidateNo1", {required: 'This is required'})}></input>
+					</p>
+					<p>{errors.answerCandidateNo1?.message}</p>
+					<p>
+						CandidateNo2:
+						<input {...register("answerCandidateNo2", {required: 'This is required'})}></input>
+					</p>
+					<p>{errors.answerCandidateNo2?.message}</p>
+					<p>
+						CandidateNo3:
+						<input {...register("answerCandidateNo3", {required: 'This is required'})}></input>
+					</p>
+					<p>{errors.answerCandidateNo3?.message}</p>
+					<p>CandidateNo4:
+						<input {...register("answerCandidateNo4", {required: 'This is required'})}></input>
+					</p>
+					<p>{errors.answerCandidateNo4?.message}</p>
+					<p>AnswerNo:
+						<input type={'number'} {...register("answerId", {
+							required: 'This is required',
+							min: {
+								value: 1,
+								message: "Min 1"
+							},
+							max: {
+								value: 4,
+								message: "Max 4"
+							}
+						})}>
+						</input>
+					</p>
+					<p>{errors.answerId?.message}</p>
+				</div>
+				<button type="submit">Submit</button>
 			</form>
 			<GoToHome/>
 		</div>

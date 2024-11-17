@@ -10,11 +10,9 @@ const QuizDetails: React.FC = () =>{
 	/* QuizDetailsFormへの遷移宣言 */
 	const navigate = useNavigate();
 	const location = useLocation();
-
 	const {questionTitle} = location.state || {questionTitle : []};
 	const [questionDetails,setQuestionDetails] = useState<QuestionDetails[]>([]);
 	let questionTitleIdKeyName : string = "questionTitle-"+questionTitle.questionTitleId
-	//console.log("key=",process.env.REACT_APP_OPEN_API);
 	localStorage.setItem(questionTitleIdKeyName,JSON.stringify(questionTitle));
 
 	// クイズ開始処理
@@ -28,8 +26,10 @@ const QuizDetails: React.FC = () =>{
 	 useEffect(() => {
 		const postQuestionTitle = async() => {
 			try{
+				console.log(questionTitle);
 				const response = await questionDetailsGet(questionTitle)
 				setQuestionDetails(response);
+
 			}
 			catch(error){
 				alert(error);
@@ -62,8 +62,6 @@ const QuizDetails: React.FC = () =>{
 	return (
 		<div>
 			<h1>Question Details</h1>
-			{/* TODO:クイズ詳細を表示 <QuizDetailsEditTable/> */}
-
 			{questionDetails.map((details) => (
 					<div>
 						<li key={details.questionDetailsId}>{details.questionWord}</li>

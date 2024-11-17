@@ -5,11 +5,9 @@ const TakeQuiz: React.FC = () =>{
 	return (
 		<div>
 			<h1>Take Question</h1>
-			<TakeQuizTable
-			/>
+				<TakeQuizTable/>
 		</div>
-	)	
-  
+	)
 }
 
 export default TakeQuiz;
