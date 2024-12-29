@@ -1,5 +1,7 @@
 import TakeQuizTable from '../components/TakeQuizTable';
 
+
+
 const TakeQuiz: React.FC = () =>{
 	/* クイズ出題ページ */
 	return (

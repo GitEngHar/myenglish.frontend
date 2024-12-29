@@ -29,7 +29,6 @@ const QuizDetails: React.FC = () =>{
 				console.log(questionTitle);
 				const response = await questionDetailsGet(questionTitle)
 				setQuestionDetails(response);
-
 			}
 			catch(error){
 				alert(error);
