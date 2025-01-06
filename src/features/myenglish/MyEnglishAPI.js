@@ -8,10 +8,8 @@ axios.defaults.withCredentials = true;
 
 
 const redirectBackendServer = (error) => {
-    console.log(error);
-    console.log(error.response);
     window.location.href = authLoginUrl;
-    console.log(error)
+    alert(error);
 }
 
 export const questionTitleSave = async (questionTitle) => {
