@@ -7,7 +7,7 @@ const authLoginUrl = "http://localhost:8080/login"
 axios.defaults.withCredentials = true;
 
 
-function redirectBackendServer(error){
+const redirectBackendServer = (error) => {
     console.log(error);
     console.log(error.response);
     window.location.href = authLoginUrl;
