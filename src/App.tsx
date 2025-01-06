@@ -8,6 +8,8 @@ import QuizDetailsForm from './pages/QuizDetailsForm';
 import TakeQuiz from './pages/TakeQuiz';
 import QuizDetailsEditForm from "./pages/QuizDetailsEditForm";
 import AIQuiz from "./pages/AIQuiz";
+import Box from "@mui/material/Box";
+import FullFeaturedCrudGrid from "./sample/sample";
 
 
 const App: React.FC = () =>{
@@ -21,6 +23,7 @@ const App: React.FC = () =>{
         <Route path="/quizdetails/edit" element={<QuizDetailsEditForm />}></Route>
         <Route path="/takequiz/" element={<TakeQuiz />}></Route>
         <Route path="/ai/" element={<AIQuiz />}></Route>
+        <Route path="/sample/tables" element={<FullFeaturedCrudGrid />}></Route>
       </Routes>
     </Router>
   )

@@ -7,16 +7,15 @@ const authLoginUrl = "http://localhost:8080/login"
 axios.defaults.withCredentials = true;
 
 
-function redirectBackendServer(error){
-    console.log(error);
-    console.log(error.response);
+const redirectBackendServer = (error) => {
     window.location.href = authLoginUrl;
-    console.log(error)
+    alert(error);
 }
 
 export const questionTitleSave = async (questionTitle) => {
     try{
-        return await axios.post(requestQuestionTitleBaseUrl+'/save', questionTitle);
+        const saveTitleUrl = new URL("/save",requestQuestionTitleBaseUrl);
+        return await axios.post(saveTitleUrl.toString(), questionTitle);
     }catch (error){
         redirectBackendServer(error);
         throw error;
@@ -25,7 +24,8 @@ export const questionTitleSave = async (questionTitle) => {
 
 export const questionTitleUpdate = async (newQuestionTitle) => {
     try{
-        return await axios.post(requestQuestionTitleBaseUrl+'/update', newQuestionTitle);
+        const updateTitleUrl = new URL("/update",requestQuestionTitleBaseUrl)
+        return await axios.post(updateTitleUrl.toString(), newQuestionTitle);
     }catch (error){
         redirectBackendServer(error);
         throw error;
@@ -44,7 +44,8 @@ export const questionTitleGet = async ()=> {
 
 export const questionTitleDelete = async (questionTitle) => {
     try{
-        return await axios.post(requestQuestionTitleBaseUrl+'/delete', questionTitle);
+        const deleteTitleUrl = new URL(requestQuestionTitleBaseUrl,"/delete");
+        return await axios.post(deleteTitleUrl.toString(), questionTitle);
     }catch (error){
         redirectBackendServer(error);
         throw error;
@@ -53,7 +54,8 @@ export const questionTitleDelete = async (questionTitle) => {
 
 export const questionDetailsSave = async (questionDetailsWrapper) => {
     try {
-        return await axios.post(requestQuestionDetailsBaseUrl + '/save', questionDetailsWrapper);
+        const saveDetailsUrl = new URL(requestQuestionDetailsBaseUrl,"/save");
+        return await axios.post(saveDetailsUrl.toString(), questionDetailsWrapper);
     } catch (error) {
         redirectBackendServer(error);
         throw error;
@@ -63,7 +65,8 @@ export const questionDetailsSave = async (questionDetailsWrapper) => {
 
 export const questionDetailsUpdate = async (questionDetails) => {
     try {
-        return await axios.post(requestQuestionDetailsBaseUrl + '/update', questionDetails);
+        const updateDetailsUrl = new URL(requestQuestionDetailsBaseUrl,"/update");
+        return await axios.post(updateDetailsUrl.toString(), questionDetails);
     } catch (error) {
         redirectBackendServer(error);
         throw error;
@@ -72,7 +75,8 @@ export const questionDetailsUpdate = async (questionDetails) => {
 
 export const questionDetailsEdit = async (questionDetails) => {
     try {
-        const response = await axios.post(requestQuestionDetailsBaseUrl + '/edit', questionDetails);
+        const editDetailsUrl = new URL(requestQuestionDetailsBaseUrl,"/edit");
+        const response = await axios.post(editDetailsUrl, questionDetails);
         return response.data;
     } catch (error) {
         redirectBackendServer(error);
@@ -82,7 +86,8 @@ export const questionDetailsEdit = async (questionDetails) => {
 
 export const questionDetailsGet = async (questionTitle) => {
     try {
-        const response = await axios.post(requestQuestionDetailsBaseUrl + "/", questionTitle);
+        const getDetailsUrl = new URL(requestQuestionDetailsBaseUrl,"/");
+        const response = await axios.post(getDetailsUrl.toString(), questionTitle);
         return response.data;
     } catch (error) {
         redirectBackendServer(error);
@@ -92,7 +97,8 @@ export const questionDetailsGet = async (questionTitle) => {
 
 export const questionDetailsDelete = async (details) => {
     try {
-        return await axios.post(requestQuestionDetailsBaseUrl + '/delete', details);
+        const deleteDetailsUrl = new URL(requestQuestionDetailsBaseUrl,"/delete");
+        return await axios.post(deleteDetailsUrl.toString(), details);
     } catch (error) {
         redirectBackendServer(error);
         throw error;
