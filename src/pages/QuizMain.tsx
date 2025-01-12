@@ -14,7 +14,7 @@ const QuizMain: React.FC = () =>{
 		setIsViewModal(false);
 	}
 
-	const editTitle = (event:any) => {
+	const editTitleAddForm = (event:any) => {
 		setAddQuizTitle(event.target.value);
 	}
 
@@ -37,7 +37,7 @@ const QuizMain: React.FC = () =>{
 				isViewModal = {isViewModal}
 				closeModal = {closeModal}
 				viewElements = {
-					<input placeholder="タイトルを入力" value={addQuestionTitle} onChange={editTitle}></input>
+					<input placeholder="タイトルを入力" value={addQuestionTitle} onChange={editTitleAddForm}></input>
 				}
 				requestAPI = {addQuestionTitleDB}
 			/>
