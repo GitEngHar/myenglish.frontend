@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import GoToHome from '../components/GoToHome';
-import { questionDetailsSave } from '../features/myenglish/MyEnglishAPI';
+import { questionDetailsAdd } from '../features/myenglish/MyEnglishAPI';
 import {useForm} from 'react-hook-form'
 import {QuestionAnswer} from '../types/QuestionAnswer';
 import {QuestionDetails} from '../types/QuestionDetails';
@@ -80,7 +80,7 @@ const QuizDetailsForm: React.FC = () =>{
 					["myEnglishQuizAnswerForm"]: updateQuestionAnswer
 			})
 			if(questionDetailsWrapper.myEnglishQuizDetailsForm.questionTitleId > 0){
-				const response = questionDetailsSave(updateQuestionDetailsWrapper);
+				const response = questionDetailsAdd(updateQuestionDetailsWrapper);
 				console.log(response);
 			}
 		}catch(error){

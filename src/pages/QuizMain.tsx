@@ -9,7 +9,7 @@ import {
 import {QuestionTitle} from "../types/QuestionTitle";
 import {useNavigate} from "react-router-dom";
 import {QuizTitle} from "../components/QuizTitle";
-import _ from "lodash"; // lodash を利用
+import _ from "lodash";
 
 const QuizMain: React.FC = () =>{
 	const [addQuestionTitle,setAddQuizTitle] = useState("");
