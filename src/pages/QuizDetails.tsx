@@ -82,7 +82,8 @@ const QuizDetails: React.FC = () =>{
 			try{
 				const response = await questionDetailsGet(questionTitle)
 				setQuestionDetailsWrapper(response);
-				console.log(response)
+				console.log(questionDetailsWrapper);
+				//console.log(response)
 			}
 			catch(error){
 				alert(error);
@@ -90,6 +91,17 @@ const QuizDetails: React.FC = () =>{
 		}
 		getQuestionDetails();
 	},[])
+
+	// 初回取得時 更新時 以外 Wrapperに対する変更はしない
+	useEffect(() => {
+		const newQuestionDetailsWrapper : QuestionDetailsWrapper[] = _.cloneDeep(questionDetailsWrapper)
+		// 更新された questionDetails をまとめて一度にセットする
+		const updatedQuestionDetails:QuestionDetails[] = newQuestionDetailsWrapper.map(
+			(wrapper) => wrapper.myEnglishQuizDetailsForm
+		);
+		// 現在の状態と併せて追加
+		setQuestionDetails(updatedQuestionDetails);
+	}, [questionDetailsWrapper]);
 
 	const postQuestionDetails = async () => {
 		try{
@@ -104,7 +116,7 @@ const QuizDetails: React.FC = () =>{
 		catch(error){
 			alert(error);
 		}
-	}
+	};
 
 	/**
 	 * input表示用のonChange関数
