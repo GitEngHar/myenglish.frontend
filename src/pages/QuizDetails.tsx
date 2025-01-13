@@ -6,15 +6,26 @@ import {questionDetailsDelete, questionDetailsGet} from '../features/myenglish/M
 import { useNavigate, useLocation } from 'react-router-dom';
 import GoToHome from '../components/GoToHome';
 import {QuestionDetailsView} from "../components/QuestionDetailsView";
+import {Modal} from "../components/Modal";
 
 const QuizDetails: React.FC = () =>{
-	/* QuizDetailsFormへの遷移宣言 */
+	const [isViewModal,setIsViewModal] = useState(false)
+	const [editIndex, setEditIndex] = useState(-1)
+
 	const navigate = useNavigate();
 	const location = useLocation();
 	const {questionTitle} = location.state || {questionTitle : []};
 	const [questionDetails,setQuestionDetails] = useState<QuestionDetails[]>([]);
 	let questionTitleIdKeyName : string = "questionTitle-"+questionTitle.questionTitleId
 	localStorage.setItem(questionTitleIdKeyName,JSON.stringify(questionTitle));
+
+	const closeModal = () => {
+		setIsViewModal(false);
+	}
+
+	const showModal = () => {
+		setIsViewModal(true);
+	};
 
 	// クイズ開始処理
 	const goToTakeQuiz = () => {
@@ -29,7 +40,6 @@ const QuizDetails: React.FC = () =>{
 			try{
 				const response = await questionDetailsGet(questionTitle)
 				setQuestionDetails(response);
-
 			}
 			catch(error){
 				alert(error);
@@ -63,11 +73,21 @@ const QuizDetails: React.FC = () =>{
 		<>
 			<QuestionDetailsView
 				questionDetails = {questionDetails}
-				handleEditClick = {handleEditClick}
+				handleEditClick = {showModal}
 				handleDeleteClick = {handleDeleteClick}
 				handleGotoQuizDetailsForm = {handleGotoQuizDetailsForm}
 				handleGotoAIQuiz = {handleGotoAIQuiz}
 				goToTakeQuiz = {goToTakeQuiz}
+				editIndex = {editIndex}
+			/>
+			<Modal
+				isViewModal = {isViewModal}
+				closeModal = {closeModal}
+				viewElements = {
+					<p>hogehoge</p>
+					// <input placeholder="タイトルを入力" value={addQuestionTitle} onChange={titleAddViewForm}></input>
+				}
+				requestAPI = {()=>{console.log("APIでDBに追加関数")}}
 			/>
 			<GoToHome/>
 		</>
