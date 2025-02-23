@@ -1,11 +1,11 @@
 import React from "react";
-import {QuestionDetails} from "../types/QuestionDetails";
 
 export const QuestionDetailsView = (props: any) => {
     const {
         questionDetails,
         handleEditClick,
         handleDeleteClick,
+        handleGotoQuizDetailsForm,
         handleGotoAIQuiz,
         goToTakeQuiz
     } = props;
@@ -13,7 +13,7 @@ export const QuestionDetailsView = (props: any) => {
         <>
             <h1>Question Details</h1>
             {
-                questionDetails.map((details:QuestionDetails) => (
+                questionDetails.map((details:any) => (
                         <div>
                             <li key={details.questionDetailsId}>{details.questionWord}</li>
                             <button onClick={() => handleEditClick(details)}>edit</button>
@@ -23,6 +23,7 @@ export const QuestionDetailsView = (props: any) => {
                 )
             }
             <p>
+                <button onClick={handleGotoQuizDetailsForm}>Add</button>
                 <button onClick={handleGotoAIQuiz}>AI-Add</button>
                 <button onClick={goToTakeQuiz}>Start</button>
             </p>

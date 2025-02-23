@@ -9,31 +9,44 @@ import {
 import {QuestionTitle} from "../types/QuestionTitle";
 import {useNavigate} from "react-router-dom";
 import {QuizTitle} from "../components/QuizTitle";
-import _ from "lodash";
 
 const QuizMain: React.FC = () =>{
 	const [addQuestionTitle,setAddQuizTitle] = useState("");
-	const [questionTitles,setQuestionTitles] = useState<QuestionTitle[]>([]);
-	const [editQuestionTitles,setEditQuestionTitles] = useState<QuestionTitle[]>([]);
+	const [questionTitles,setQuestionTitles] = useState<QuestionTitle[]>([
+		{
+			questionTitleId : 0,
+			ownerUserId :  0,
+			questionTitle : ""
+		}
+	]);
+	const [editQuestionTitles,setEditQuestionTitles] = useState<QuestionTitle[]>([
+		{
+			questionTitleId : 0,
+			ownerUserId :  0,
+			questionTitle : ""
+		}
+	]);
+
 	const [isViewModal,setIsViewModal] = useState(false)
 	const [isEdit, setIsEdit] = useState(false)
 	const [editIndex, setEditIndex] = useState(-1)
 	const navigate = useNavigate();
-
-	const toggleEditMode = (index:number) => ()=> {
+	const editMode = (index:number) => ()=> {
 		setEditIndex(index);
 		setIsEdit(true);
 	}
 
 	const editCancel = () => {
 		// 更新された編集用タイトルを破棄するために questionTitlesの値を代入する
-		setEditQuestionTitles(_.cloneDeep(questionTitles)); //deepコピーで渡す
+		setEditQuestionTitles(JSON.parse(JSON.stringify(questionTitles))); //deepコピーで渡す
+		console.log(`edit: ${editQuestionTitles[0].questionTitle} && title: ${questionTitles[0].questionTitle}`)
 		setIsEdit(false);
 		setEditIndex(-1);
 	}
 
 	const editTitleViewForm = (index:number) => (event: React.ChangeEvent<HTMLInputElement>) =>{
 		// 編集用のタイトルを新しく入力されたタイトルで更新
+
 		const newEditQuestionTitles : QuestionTitle[] = [...editQuestionTitles];
 		newEditQuestionTitles[index].questionTitle = event.target.value;
 		setEditQuestionTitles(newEditQuestionTitles);
@@ -41,11 +54,11 @@ const QuizMain: React.FC = () =>{
 
 	const editSave =  (index:number) => async () => {
 		// 更新された編集用のタイトルをAPI送信用のタイトルへコピー
-		const sendQuestionTitle : QuestionTitle = _.cloneDeep(editQuestionTitles[index]);
+		const sendQuestionTitle : QuestionTitle = JSON.parse(JSON.stringify(editQuestionTitles[index]));
 		// 登録時DBにデータが保存されてはいるがフロントでIDが同期されていない場合は 更新タイトル名,更新前タイトル名で渡す
 		sendQuestionTitle.questionTitleId === 0 ? sendQuestionTitle.questionTitle
 			= `${editQuestionTitles[index].questionTitle},${questionTitles[index].questionTitle}` : console.log("QuestionIdをフロントとサーバで同期済み");
-		setQuestionTitles(_.cloneDeep(editQuestionTitles));
+		setQuestionTitles(JSON.parse(JSON.stringify(editQuestionTitles)));
 		setIsEdit(false);
 		setEditIndex(-1);
 		// APIで送信
@@ -75,10 +88,9 @@ const QuizMain: React.FC = () =>{
 		await questionTitleSave(newQuestionTitle);
 		const newQuestionTitles : QuestionTitle[] = [...questionTitles,newQuestionTitle]
 		setQuestionTitles(newQuestionTitles);
-		setEditQuestionTitles(_.cloneDeep(newQuestionTitles));
+		setEditQuestionTitles(JSON.parse(JSON.stringify(newQuestionTitles)));
 		setAddQuizTitle("");
 		setIsViewModal(false);
-		window.location.reload()
 	}
 
 	const deleteQuestion = (index:number) => async () => {
@@ -95,7 +107,7 @@ const QuizMain: React.FC = () =>{
 		const getQuestionTItlesFromServer = async () => {
 			const response = await questionTitleGet();
 			setQuestionTitles(response);
-			setEditQuestionTitles(_.cloneDeep(response));
+			setEditQuestionTitles(JSON.parse(JSON.stringify(response)));
 		}
 		getQuestionTItlesFromServer();
 	}, []);
@@ -116,7 +128,7 @@ const QuizMain: React.FC = () =>{
 					editSave = {editSave}
 					editCancel = {editCancel}
 					GotoQuizDetails = {GotoQuizDetails}
-					toggleEditMode = {toggleEditMode}
+					editMode = {editMode}
 					deleteQuestion = {deleteQuestion}
 				/>
 			<button onClick={showModal}>タイトルを追加</button>

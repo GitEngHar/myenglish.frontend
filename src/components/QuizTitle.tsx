@@ -11,7 +11,7 @@ export const QuizTitle = (props:any) => {
         editSave,
         editCancel,
         GotoQuizDetails,
-        toggleEditMode,
+        editMode,
         deleteQuestion
     } = props
     return (
@@ -28,7 +28,7 @@ export const QuizTitle = (props:any) => {
                         :
                         <li>
                             <p onClick={() => GotoQuizDetails(questionTitle)}>{questionTitle.questionTitle}</p>
-                            <button onClick={toggleEditMode(index)}>編集</button>
+                            <button onClick={editMode(index)}>編集</button>
                             <button onClick={deleteQuestion(index)}>削除</button>
                         </li>
 
