@@ -10,7 +10,7 @@ const AIQuiz: React.FC = () =>{
 	const [base64Image, setBase64Image] = useState<string[]>([]);
 	const location = useLocation();
 	const {questionTitle} = location.state || {questionTitle : []};
-
+	
 	/* クイズを生成 */
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();

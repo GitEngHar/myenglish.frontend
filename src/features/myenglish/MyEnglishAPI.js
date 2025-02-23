@@ -51,7 +51,7 @@ export const questionTitleDelete = async (questionTitle) => {
     }
 }
 
-export const questionDetailsSave = async (questionDetailsWrapper) => {
+export const questionDetailsAdd = async (questionDetailsWrapper) => {
     try {
         return await axios.post(requestQuestionDetailsBaseUrl + '/save', questionDetailsWrapper);
     } catch (error) {
@@ -61,9 +61,9 @@ export const questionDetailsSave = async (questionDetailsWrapper) => {
 }
 
 
-export const questionDetailsUpdate = async (questionDetails) => {
+export const questionDetailsUpdate = async (questionDetailsWrapper) => {
     try {
-        return await axios.post(requestQuestionDetailsBaseUrl + '/update', questionDetails);
+        return await axios.post(requestQuestionDetailsBaseUrl + '/update', questionDetailsWrapper);
     } catch (error) {
         redirectBackendServer(error);
         throw error;
@@ -82,7 +82,7 @@ export const questionDetailsEdit = async (questionDetails) => {
 
 export const questionDetailsGet = async (questionTitle) => {
     try {
-        const response = await axios.post(requestQuestionDetailsBaseUrl + "/", questionTitle);
+        const response = await axios.post(requestQuestionDetailsBaseUrl + "/all", questionTitle);
         return response.data;
     } catch (error) {
         redirectBackendServer(error);
