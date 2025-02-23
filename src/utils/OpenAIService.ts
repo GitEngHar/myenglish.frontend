@@ -3,7 +3,7 @@ import {QuestionDetails} from '../types/QuestionDetails'
 import {QuestionAnswer} from '../types/QuestionAnswer'
 import {QuestionTitle} from '../types/QuestionTitle'
 import {getOpenAIResponse} from '../features/open-ai/OpenAIAPI';
-import {questionDetailsSave} from '../features/myenglish/MyEnglishAPI'
+import {questionDetailsAdd} from '../features/myenglish/MyEnglishAPI'
 /* OpenAIに関連する機能 */
 export class OpenAIService {
     mockData : string = "問題: 渋谷のスクランブル交差点は、多くの人々が行き交う活気に満ちた場所です。\n" +
@@ -97,7 +97,7 @@ export class OpenAIService {
         // データを登録
         const questionDetailsWrapper = this.convertAIDataToWrapper(responseAIData,questionTitle.questionTitleId);
         if (questionDetailsWrapper != null){
-            await questionDetailsSave(questionDetailsWrapper);
+            await questionDetailsAdd(questionDetailsWrapper);
         }else{
             console.log("データ登録を回避")
         }

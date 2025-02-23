@@ -21,6 +21,7 @@ export const Modal = (props :any) => {
         alignItems: "center",
         justifyContent: "center",
     };
+
     //alert(viewElements)
     return(
         isViewModal ? (
