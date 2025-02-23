@@ -5,6 +5,7 @@ import {questionDetailsDelete, questionDetailsGet} from '../features/myenglish/M
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import GoToHome from '../components/GoToHome';
+import {QuestionDetailsView} from "../components/QuestionDetailsView";
 
 const QuizDetails: React.FC = () =>{
 	/* QuizDetailsFormへの遷移宣言 */
@@ -26,7 +27,6 @@ const QuizDetails: React.FC = () =>{
 	 useEffect(() => {
 		const postQuestionTitle = async() => {
 			try{
-				console.log(questionTitle);
 				const response = await questionDetailsGet(questionTitle)
 				setQuestionDetails(response);
 
@@ -60,24 +60,17 @@ const QuizDetails: React.FC = () =>{
 
 
 	return (
-		<div>
-			<h1>Question Details</h1>
-			{questionDetails.map((details) => (
-					<div>
-						<li key={details.questionDetailsId}>{details.questionWord}</li>
-						<button onClick={() => handleEditClick(details)}>edit</button>
-						<button onClick={() => handleDeleteClick(details)}>delete</button>
-					</div>
-				)
-			)
-			}
-			<p>
-				<button onClick={handleGotoQuizDetailsForm}>Add</button>
-				<button onClick={handleGotoAIQuiz}>AI-Add</button>
-				<button onClick={goToTakeQuiz}>Start</button>
-			</p>
+		<>
+			<QuestionDetailsView
+				questionDetails = {questionDetails}
+				handleEditClick = {handleEditClick}
+				handleDeleteClick = {handleDeleteClick}
+				handleGotoQuizDetailsForm = {handleGotoQuizDetailsForm}
+				handleGotoAIQuiz = {handleGotoAIQuiz}
+				goToTakeQuiz = {goToTakeQuiz}
+			/>
 			<GoToHome/>
-		</div>
+		</>
 	)	
 
 }
