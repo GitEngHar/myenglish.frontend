@@ -78,6 +78,7 @@ const QuizMain: React.FC = () =>{
 		setEditQuestionTitles(_.cloneDeep(newQuestionTitles));
 		setAddQuizTitle("");
 		setIsViewModal(false);
+		window.location.reload()
 	}
 
 	const deleteQuestion = (index:number) => async () => {
