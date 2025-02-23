@@ -61,9 +61,9 @@ export const questionDetailsAdd = async (questionDetailsWrapper) => {
 }
 
 
-export const questionDetailsUpdate = async (questionDetails) => {
+export const questionDetailsUpdate = async (questionDetailsWrapper) => {
     try {
-        return await axios.post(requestQuestionDetailsBaseUrl + '/update', questionDetails);
+        return await axios.post(requestQuestionDetailsBaseUrl + '/update', questionDetailsWrapper);
     } catch (error) {
         redirectBackendServer(error);
         throw error;

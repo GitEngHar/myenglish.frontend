@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {QuestionDetails} from '../types/QuestionDetails';
 
-import {questionDetailsAdd, questionDetailsDelete, questionDetailsGet} from '../features/myenglish/MyEnglishAPI';
+import {
+	questionDetailsAdd,
+	questionDetailsDelete,
+	questionDetailsEdit,
+	questionDetailsGet, questionDetailsUpdate
+} from '../features/myenglish/MyEnglishAPI';
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import GoToHome from '../components/GoToHome';
@@ -10,10 +15,12 @@ import {Modal} from "../components/Modal";
 import {QuestionAnswer} from "../types/QuestionAnswer";
 import {QuestionDetailsWrapper} from "../types/QuestionDetailsWrapper";
 import _ from "lodash";
-import quizDetailsForm from "./QuizDetailsForm";
 const QuizDetails: React.FC = () =>{
-	const [isViewModal,setIsViewModal] = useState(false)
-	const [editIndex, setEditIndex] = useState(-1)
+	// 設問を追加 モーダル表示を制御するtoggle
+	const [isQuestionAddViewModal,setIsQuestionAddViewModal] = useState(false)
+	// 問題を編集 モーダル表示を制御するtoggle
+	const [isQuestionEditViewModal,setIsQuestionEditViewModal] = useState(false)
+	// const [editIndex, setEditIndex] = useState(-1)
 	const navigate = useNavigate();
 	const location = useLocation();
 	const {questionTitle} = location.state || {questionTitle : []};
@@ -27,7 +34,7 @@ const QuizDetails: React.FC = () =>{
 			questionWord : ""
 		}
 	);
-	// 設問の回答情報
+	// 設問の回答情報オブジェクト
 	const [questionAnswer,setQuestionAnswer] = useState<QuestionAnswer>(
 		{
 			questionAnswerId: 0,
@@ -42,24 +49,34 @@ const QuizDetails: React.FC = () =>{
 	);
 
 	// 設問と回答情報のWrapper Object
-	const [questionDetailsWrapper,setQuestionDetailsWrapper] = useState<QuestionDetailsWrapper[]>([]);
-
+	const [questionDetailsWrapper, setQuestionDetailsWrapper] = useState<QuestionDetailsWrapper[]>([]);
+	// 問題のタイトルID
 	const questionTitleIdKeyName : string = "questionTitle-"+questionTitle.questionTitleId
 	localStorage.setItem(questionTitleIdKeyName,JSON.stringify(questionTitle));
 
-	// 分割代入
+	// 問題の答え
 	const {answerId,answerCandidateNo1,answerCandidateNo2,answerCandidateNo3,answerCandidateNo4} = questionAnswer;
-	const closeModal = () => {
-		setIsViewModal(false);
+	const closeQuestionAddModal = () => {
+		setIsQuestionAddViewModal(false);
 	}
 
-	const showModal = () => {
-		setIsViewModal(true);
-	};
+	const showQuestionAddModal = () => {
+		setIsQuestionAddViewModal(true);
+	}
+
+	// 編集モーダルのcloseがクリックされた時のアクション
+	const closeQuestionEditViewModal = () => {
+		setIsQuestionEditViewModal(false);
+	}
+
+	// editボタンがクリックされた時のアクション
+	const showQuestionEditViewModal = () => {
+		setIsQuestionEditViewModal(true);
+	}
 
 	/**
-	 * 遷移処理
-	 * */
+ 	* 遷移処理
+ 	**/
 	const goToTakeQuiz = () => {
 		navigate('/takequiz/',{state : {questionTitle : questionTitle}})
 	}
@@ -82,8 +99,6 @@ const QuizDetails: React.FC = () =>{
 			try{
 				const response = await questionDetailsGet(questionTitle)
 				setQuestionDetailsWrapper(response);
-				console.log(questionDetailsWrapper);
-				//console.log(response)
 			}
 			catch(error){
 				alert(error);
@@ -109,9 +124,9 @@ const QuizDetails: React.FC = () =>{
 				myEnglishQuizDetailsForm: questionDetail,
 				myEnglishQuizAnswerForm: questionAnswer
 			};
-
-			const response = await questionDetailsAdd(sendQuestionDetailsWrapper);
-			console.log(response)
+			await questionDetailsAdd(sendQuestionDetailsWrapper);
+			closeQuestionAddModal()
+			window.location.reload()
 		}
 		catch(error){
 			alert(error);
@@ -126,6 +141,7 @@ const QuizDetails: React.FC = () =>{
 		newQuestionDetail.questionWord=event.target.value;
 		setQuestionDetail(newQuestionDetail);
 	}
+
 	const answerAddViewForm = (event:any) => {
 		// カスタム属性でオブジェクト属性を取得
 		const targetObjectElement=event.target.getAttribute("data-key");
@@ -136,9 +152,46 @@ const QuizDetails: React.FC = () =>{
 		}))
 	}
 
-	// TODO: 削除する
-	const handleEditClick = (details : QuestionDetails) =>{
-		navigate('/quizdetails/edit',{state : {questionDetails : details}});
+
+	// editボタンがクリックされた時の振る舞い
+	const handleEditClick = async (questionDetail:QuestionDetails) =>{
+		try{
+			// update用の問題を登録する
+			const updateQuestionDetail = _.cloneDeep(questionDetail)
+			// 編集用のモーダルを見えるようにする
+			showQuestionEditViewModal()
+			// 編集対象のクイズ詳細を取得する
+			setQuestionDetail(updateQuestionDetail)
+			// 編集対象に紐づく答えのデータを取得する
+			const response = await questionDetailsEdit(questionDetail);
+			console.log(response)
+			// 答えのオブジェクトへ値を代入する
+			setQuestionAnswer(response)
+			// フォームに値をセット
+		}catch(error){
+			alert(error);
+		}
+	}
+
+	const postQuestionDetailsWrapper = async() => {
+		try{
+			const updateQuestionDetail = ({
+				...questionDetail
+			});
+
+			const updateQuestionAnswer = ({
+				...questionAnswer
+			});
+
+			const updateQuestionDetailWrapper:QuestionDetailsWrapper= ({
+				["myEnglishQuizDetailsForm"]:updateQuestionDetail,
+				["myEnglishQuizAnswerForm"]:updateQuestionAnswer
+			})
+			await questionDetailsUpdate(updateQuestionDetailWrapper)
+			window.location.reload();
+		}catch(error){
+			alert(error);
+		}
 	}
 
 	// TODO: 削除する
@@ -148,23 +201,20 @@ const QuizDetails: React.FC = () =>{
 	}
 
 
-
 	return (
-
 		<>
 			<QuestionDetailsView
 				questionDetails={questionDetails}
-				handleEditClick={showModal}
+				handleEditClick={handleEditClick}
 				handleDeleteClick={handleDeleteClick}
 				handleGotoQuizDetailsForm={gotoQuizDetailsForm}
 				handleGotoAIQuiz={gotoAIQuiz}
 				goToTakeQuiz={goToTakeQuiz}
-				editIndex={editIndex}
 			/>
-			<button onClick={showModal}>設問を追加</button>
+			<button onClick={showQuestionAddModal}>設問を追加</button>
 			<Modal
-				isViewModal={isViewModal}
-				closeModal={closeModal}
+				isViewModal={isQuestionAddViewModal}
+				closeModal={closeQuestionAddModal}
 				viewElements={
 					<>
 						<input placeholder="設問を入力してください" value={questionDetail?.questionWord} onChange={detailAddViewForm}></input>
@@ -174,10 +224,27 @@ const QuizDetails: React.FC = () =>{
 						<input placeholder="回答候補4" value={answerCandidateNo4} data-key="answerCandidateNo4" onChange={answerAddViewForm}></input>
 						<input placeholder="答えの番号を入力" data-key="answerId" value={answerId} onChange={answerAddViewForm}></input>
 					</>
-					// <input placeholder="タイトルを入力" value={addQuestionTitle} onChange={titleAddViewForm}></input>
 				}
 				requestAPI={postQuestionDetails}
 			/>
+			<Modal
+				isViewModal={isQuestionEditViewModal}
+				closeModal={closeQuestionEditViewModal}
+				viewElements={
+				//TODO: 問題情報に紐づく回答情報がnullの場合の処理を書く
+					<>
+						<p>編集</p>
+						<input placeholder="設問を入力してください" value={questionDetail.questionWord} onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補1" value={questionAnswer.answerCandidateNo1} data-key="answerCandidateNo1" onChange={answerAddViewForm}></input>
+						<input placeholder="回答候補2" value={questionAnswer.answerCandidateNo2} data-key="answerCandidateNo2" onChange={answerAddViewForm}></input>
+						<input placeholder="回答候補3" value={questionAnswer.answerCandidateNo3} data-key="answerCandidateNo3" onChange={answerAddViewForm}></input>
+						<input placeholder="回答候補4" value={questionAnswer.answerCandidateNo4} data-key="answerCandidateNo4" onChange={answerAddViewForm}></input>
+						<input placeholder="答えの番号を入力" data-key="answerId" value={answerId} onChange={answerAddViewForm}></input>
+					</>
+				}
+				requestAPI={postQuestionDetailsWrapper}
+			/>
+
 			<GoToHome/>
 		</>
 	)
