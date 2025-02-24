@@ -1,9 +1,14 @@
 import axios from 'axios';
+// myenglish-server-service
+// const requestQuestionTitleBaseUrl =  'http://localhost:8080/quizrest';
+// const requestQuestionDetailsBaseUrl = "http://localhost:8080/quizdetailsrest";
+// const requestTakeQuestionBaseUrl = "http://localhost:8080/takequizrest/";
+// const authLoginUrl = "http://localhost:8080/login"
 
-const requestQuestionTitleBaseUrl =  'http://localhost:8080/quizrest';
-const requestQuestionDetailsBaseUrl = "http://localhost:8080/quizdetailsrest";
-const requestTakeQuestionBaseUrl = "http://localhost:8080/takequizrest/";
-const authLoginUrl = "http://localhost:8080/login"
+const requestQuestionTitleBaseUrl =  'http://myenglish-server-service:8080/quizrest';
+const requestQuestionDetailsBaseUrl = "http://myenglish-server-service:8080/quizdetailsrest";
+const requestTakeQuestionBaseUrl = "http://myenglish-server-service:8080/takequizrest/";
+const authLoginUrl = "http://myenglish-server-service:8080/login"
 axios.defaults.withCredentials = true;
 
 
