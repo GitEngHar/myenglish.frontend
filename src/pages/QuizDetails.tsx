@@ -89,7 +89,6 @@ const QuizDetails: React.FC = () =>{
 			navigate('/ai',{state : {questionTitle : questionTitle}});
 	}
 
-
 	/**
 	 * クイズタイトルに紐づくクイズ詳細情報を取得する関数
 	 * @param questionTitle クイズタイトル

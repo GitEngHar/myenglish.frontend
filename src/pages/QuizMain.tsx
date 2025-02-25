@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from '../components/Modal'
 import {
+	loginConfirmGet,
 	questionTitleDelete,
 	questionTitleGet,
 	questionTitleSave,
-	questionTitleUpdate
+	questionTitleUpdate,
+	redirectBackendServer
 } from "../features/myenglish/MyEnglishAPI";
 import {QuestionTitle} from "../types/QuestionTitle";
 import {useNavigate} from "react-router-dom";
@@ -19,7 +21,7 @@ const QuizMain: React.FC = () =>{
 	const [isEdit, setIsEdit] = useState(false)
 	const [editIndex, setEditIndex] = useState(-1)
 	const navigate = useNavigate();
-
+	const [isLogin, setIsLogin] = useState(false)
 	const toggleEditMode = (index:number) => ()=> {
 		setEditIndex(index);
 		setIsEdit(true);
@@ -93,9 +95,17 @@ const QuizMain: React.FC = () =>{
 	// ページレンダリングの初期でDBからクイズデータを取得する
 	useEffect(() => {
 		const getQuestionTItlesFromServer = async () => {
-			const response = await questionTitleGet();
-			setQuestionTitles(response);
-			setEditQuestionTitles(_.cloneDeep(response));
+			// ユーザーがログインしているかを判定する
+			const isLoginStatus: {authenticated: boolean} = await loginConfirmGet();
+			setIsLogin(isLoginStatus.authenticated)
+			if(isLoginStatus.authenticated){
+				const response = await questionTitleGet();
+				setQuestionTitles(response);
+				setEditQuestionTitles(_.cloneDeep(response));
+			}else{
+				// loginページへリダイレクトする
+				redirectBackendServer();
+			}
 		}
 		getQuestionTItlesFromServer();
 	}, []);
@@ -103,32 +113,40 @@ const QuizMain: React.FC = () =>{
 	const GotoQuizDetails = (questionTitle: QuestionTitle) => {
 		navigate("/quizdetails",{state: {questionTitle:questionTitle}})
 	}
+
 	/** 問題タイトルページ */
 	return (
-		<div>
-			<h1>Question List</h1>
+		isLogin ? (
+			<>
+				<h1>Question List</h1>
 				<QuizTitle
-					questionTitles = {questionTitles}
-					editIndex = {editIndex}
-					isEdit = {isEdit}
-					editQuestionTitles = {editQuestionTitles}
-					editTitleViewForm = {editTitleViewForm}
-					editSave = {editSave}
-					editCancel = {editCancel}
-					GotoQuizDetails = {GotoQuizDetails}
-					toggleEditMode = {toggleEditMode}
-					deleteQuestion = {deleteQuestion}
+					questionTitles={questionTitles}
+					editIndex={editIndex}
+					isEdit={isEdit}
+					editQuestionTitles={editQuestionTitles}
+					editTitleViewForm={editTitleViewForm}
+					editSave={editSave}
+					editCancel={editCancel}
+					GotoQuizDetails={GotoQuizDetails}
+					toggleEditMode={toggleEditMode}
+					deleteQuestion={deleteQuestion}
 				/>
-			<button onClick={showModal}>タイトルを追加</button>
-			<Modal
-				isViewModal = {isViewModal}
-				closeModal = {closeModal}
-				viewElements = {
-					<input placeholder="タイトルを入力" value={addQuestionTitle} onChange={titleAddViewForm}></input>
-				}
-				requestAPI = {addQuestionTitleDB}
-			/>
-		</div>
+				<button onClick={showModal}>タイトルを追加</button>
+				<Modal
+					isViewModal={isViewModal}
+					closeModal={closeModal}
+					viewElements={
+						<input placeholder="タイトルを入力" value={addQuestionTitle}
+							   onChange={titleAddViewForm}></input>
+					}
+					requestAPI={addQuestionTitleDB}
+				/>
+			</>
+		):(
+			<>
+				未ログイン
+			</>
+		)
 	)
 
 }
