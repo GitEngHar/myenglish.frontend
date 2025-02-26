@@ -18,6 +18,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # 7. ビルドしたアプリをnginxにコピー
+COPY default.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/build /usr/share/nginx/html
 
 # 8. nginxがリッスンするポートを指定
