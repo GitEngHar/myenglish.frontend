@@ -4,7 +4,6 @@ import {QuestionDetails} from '../types/QuestionDetails';
 import {
 	questionDetailsAdd,
 	questionDetailsDelete,
-	questionDetailsEdit,
 	questionDetailsGet, questionDetailsUpdate
 } from '../features/myenglish/MyEnglishAPI';
 
@@ -12,8 +11,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import GoToHome from '../components/GoToHome';
 import {QuestionDetailsView} from "../components/QuestionDetailsView";
 import {Modal} from "../components/Modal";
-import {QuestionAnswer} from "../types/QuestionAnswer";
-import {QuestionDetailsWrapper} from "../types/QuestionDetailsWrapper";
 import _ from "lodash";
 const QuizDetails: React.FC = () =>{
 	// 設問を追加 モーダル表示を制御するtoggle
@@ -25,37 +22,26 @@ const QuizDetails: React.FC = () =>{
 	const location = useLocation();
 	const {questionTitle} = location.state || {questionTitle : []};
 	// 問題の設問の配列
-	const [questionDetails,setQuestionDetails] = useState<QuestionDetails[]>([]);
-	// 問題の設問
-	const [questionDetail,setQuestionDetail] = useState<QuestionDetails>(
+	const [allQuestionDetails,setAllQuestionDetails] = useState<QuestionDetails[]>([]);
+	// 問題の設問と回答オブジェクト
+	const [questionDetails,setQuestionDetails] = useState<QuestionDetails>(
 		{
 			questionDetailsId : 0,
 			questionTitleId : questionTitle.questionTitleId,
-			questionWord : ""
-		}
-	);
-	// 設問の回答情報オブジェクト
-	const [questionAnswer,setQuestionAnswer] = useState<QuestionAnswer>(
-		{
-			questionAnswerId: 0,
-			questionTitleId : questionTitle.questionTitleId,
-			questionDetailsId : 0,
-			answerId : 1,
+			questionWord : "",
 			answerCandidateNo1 : "",
 			answerCandidateNo2 : "",
 			answerCandidateNo3 : "",
-			answerCandidateNo4 : ""
+			answerCandidateNo4 : "",
+			answerNumber: 0
 		}
 	);
-
-	// 設問と回答情報のWrapper Object
-	const [questionDetailsWrapper, setQuestionDetailsWrapper] = useState<QuestionDetailsWrapper[]>([]);
 	// 問題のタイトルID
 	const questionTitleIdKeyName : string = "questionTitle-"+questionTitle.questionTitleId
 	localStorage.setItem(questionTitleIdKeyName,JSON.stringify(questionTitle));
 
 	// 問題の答え
-	const {answerId,answerCandidateNo1,answerCandidateNo2,answerCandidateNo3,answerCandidateNo4} = questionAnswer;
+	const {questionWord,answerCandidateNo1,answerCandidateNo2,answerCandidateNo3,answerCandidateNo4,answerNumber} = questionDetails;
 	const closeQuestionAddModal = () => {
 		setIsQuestionAddViewModal(false);
 	}
@@ -78,7 +64,8 @@ const QuizDetails: React.FC = () =>{
  	* 遷移処理
  	**/
 	const goToTakeQuiz = () => {
-		navigate('/takequiz/',{state : {questionTitle : questionTitle}})
+		console.log(allQuestionDetails)
+		navigate('/takequiz/',{state : {allQuestionDetails : [...allQuestionDetails]}})
 	}
 	const gotoQuizDetailsForm =
 		() => {
@@ -94,36 +81,21 @@ const QuizDetails: React.FC = () =>{
 	 * @param questionTitle クイズタイトル
 	*/
 	 useEffect(() => {
-		const getQuestionDetails = async() => {
+		const getAllQuestionDetails = async() => {
 			try{
 				const response = await questionDetailsGet(questionTitle)
-				setQuestionDetailsWrapper(response);
+				setAllQuestionDetails(response);
 			}
 			catch(error){
 				alert(error);
 			}
 		}
-		getQuestionDetails();
+		 getAllQuestionDetails();
 	},[])
 
-	// 初回取得時 更新時 以外 Wrapperに対する変更はしない
-	useEffect(() => {
-		const newQuestionDetailsWrapper : QuestionDetailsWrapper[] = _.cloneDeep(questionDetailsWrapper)
-		// 更新された questionDetails をまとめて一度にセットする
-		const updatedQuestionDetails:QuestionDetails[] = newQuestionDetailsWrapper.map(
-			(wrapper) => wrapper.myEnglishQuizDetailsForm
-		);
-		// 現在の状態と併せて追加
-		setQuestionDetails(updatedQuestionDetails);
-	}, [questionDetailsWrapper]);
-
-	const postQuestionDetails = async () => {
+	const questionDetailsAddHandler = async () => {
 		try{
-			const sendQuestionDetailsWrapper:QuestionDetailsWrapper = {
-				myEnglishQuizDetailsForm: questionDetail,
-				myEnglishQuizAnswerForm: questionAnswer
-			};
-			await questionDetailsAdd(sendQuestionDetailsWrapper);
+			await questionDetailsAdd(questionDetails);
 			closeQuestionAddModal()
 			window.location.reload()
 		}
@@ -136,66 +108,40 @@ const QuizDetails: React.FC = () =>{
 	 * input表示用のonChange関数
 	 * */
 	const detailAddViewForm = (event:any) => {
-		const newQuestionDetail = _.cloneDeep(questionDetail);
-		newQuestionDetail.questionWord=event.target.value;
-		setQuestionDetail(newQuestionDetail);
-	}
-
-	const answerAddViewForm = (event:any) => {
-		// カスタム属性でオブジェクト属性を取得
 		const targetObjectElement=event.target.getAttribute("data-key");
-		// 対象属性のオブジェクト値を変更
-		setQuestionAnswer((prevAnswer) => ({
-			...prevAnswer,
+		setQuestionDetails((prevDetail) => ({
+			...prevDetail,
 			[targetObjectElement]:event.target.value
 		}))
 	}
 
-
 	// editボタンがクリックされた時の振る舞い
-	const handleEditClick = async (questionDetail:QuestionDetails) =>{
+	const handleEditClick = async (questionDetails:QuestionDetails) =>{
 		try{
 			// update用の問題を登録する
-			const updateQuestionDetail = _.cloneDeep(questionDetail)
+			const updateQuestionDetail = _.cloneDeep(questionDetails)
 			// 編集用のモーダルを見えるようにする
 			showQuestionEditViewModal()
-			// 編集対象のクイズ詳細を取得する
-			setQuestionDetail(updateQuestionDetail)
-			// 編集対象に紐づく答えのデータを取得する
-			const response = await questionDetailsEdit(questionDetail);
-			console.log(response)
-			// 答えのオブジェクトへ値を代入する
-			setQuestionAnswer(response)
-			// フォームに値をセット
+			// 編集対象のクイズ詳細を取得するs
+			setQuestionDetails(updateQuestionDetail)
 		}catch(error){
 			alert(error);
 		}
 	}
 
-	const postQuestionDetailsWrapper = async() => {
+	const questionDetailsUpdateHandler = async () => {
 		try{
-			const updateQuestionDetail = ({
-				...questionDetail
-			});
-
-			const updateQuestionAnswer = ({
-				...questionAnswer
-			});
-
-			const updateQuestionDetailWrapper:QuestionDetailsWrapper= ({
-				["myEnglishQuizDetailsForm"]:updateQuestionDetail,
-				["myEnglishQuizAnswerForm"]:updateQuestionAnswer
-			})
-			await questionDetailsUpdate(updateQuestionDetailWrapper)
-			window.location.reload();
-		}catch(error){
+			await questionDetailsUpdate(questionDetails);
+			closeQuestionAddModal()
+			window.location.reload()
+		}
+		catch(error){
 			alert(error);
 		}
-	}
+	};
 
-	// TODO: 削除する
 	const handleDeleteClick = async(details : QuestionDetails) =>{
-		const response = await questionDetailsDelete(details);
+		await questionDetailsDelete(details);
 		window.location.reload();
 	}
 
@@ -203,7 +149,7 @@ const QuizDetails: React.FC = () =>{
 	return (
 		<>
 			<QuestionDetailsView
-				questionDetails={questionDetails}
+				questionDetails={allQuestionDetails}
 				handleEditClick={handleEditClick}
 				handleDeleteClick={handleDeleteClick}
 				handleGotoQuizDetailsForm={gotoQuizDetailsForm}
@@ -216,15 +162,15 @@ const QuizDetails: React.FC = () =>{
 				closeModal={closeQuestionAddModal}
 				viewElements={
 					<>
-						<input placeholder="設問を入力してください" value={questionDetail?.questionWord} onChange={detailAddViewForm}></input>
-						<input placeholder="回答候補1" value={answerCandidateNo1} data-key="answerCandidateNo1" onChange={answerAddViewForm}></input>
-						<input placeholder="回答候補2" value={answerCandidateNo2} data-key="answerCandidateNo2" onChange={answerAddViewForm}></input>
-						<input placeholder="回答候補3" value={answerCandidateNo3} data-key="answerCandidateNo3" onChange={answerAddViewForm}></input>
-						<input placeholder="回答候補4" value={answerCandidateNo4} data-key="answerCandidateNo4" onChange={answerAddViewForm}></input>
-						<input placeholder="答えの番号を入力" data-key="answerId" value={answerId} onChange={answerAddViewForm}></input>
+						<input placeholder="設問を入力してください" value={questionWord} data-key="questionWord" onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補1" value={answerCandidateNo1} data-key="answerCandidateNo1" onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補2" value={answerCandidateNo2} data-key="answerCandidateNo2" onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補3" value={answerCandidateNo3} data-key="answerCandidateNo3" onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補4" value={answerCandidateNo4} data-key="answerCandidateNo4" onChange={detailAddViewForm}></input>
+						<input placeholder="答えの番号を入力" data-key="answerNumber" value={answerNumber} onChange={detailAddViewForm}></input>
 					</>
 				}
-				requestAPI={postQuestionDetails}
+				requestAPI={questionDetailsAddHandler}
 			/>
 			<Modal
 				isViewModal={isQuestionEditViewModal}
@@ -233,15 +179,15 @@ const QuizDetails: React.FC = () =>{
 				//TODO: 問題情報に紐づく回答情報がnullの場合の処理を書く
 					<>
 						<p>編集</p>
-						<input placeholder="設問を入力してください" value={questionDetail.questionWord} onChange={detailAddViewForm}></input>
-						<input placeholder="回答候補1" value={questionAnswer.answerCandidateNo1} data-key="answerCandidateNo1" onChange={answerAddViewForm}></input>
-						<input placeholder="回答候補2" value={questionAnswer.answerCandidateNo2} data-key="answerCandidateNo2" onChange={answerAddViewForm}></input>
-						<input placeholder="回答候補3" value={questionAnswer.answerCandidateNo3} data-key="answerCandidateNo3" onChange={answerAddViewForm}></input>
-						<input placeholder="回答候補4" value={questionAnswer.answerCandidateNo4} data-key="answerCandidateNo4" onChange={answerAddViewForm}></input>
-						<input placeholder="答えの番号を入力" data-key="answerId" value={answerId} onChange={answerAddViewForm}></input>
+						<input placeholder="設問を入力してください" value={questionWord} onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補1" value={answerCandidateNo1} data-key="answerCandidateNo1" onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補2" value={answerCandidateNo2} data-key="answerCandidateNo2" onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補3" value={answerCandidateNo3} data-key="answerCandidateNo3" onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補4" value={answerCandidateNo4} data-key="answerCandidateNo4" onChange={detailAddViewForm}></input>
+						<input placeholder="答えの番号を入力" data-key="answerNumber" value={answerNumber} onChange={detailAddViewForm}></input>
 					</>
 				}
-				requestAPI={postQuestionDetailsWrapper}
+				requestAPI={questionDetailsUpdateHandler}
 			/>
 
 			<GoToHome/>

@@ -1,6 +1,4 @@
-import {QuestionDetailsWrapper} from '../types/QuestionDetailsWrapper'
 import {QuestionDetails} from '../types/QuestionDetails'
-import {QuestionAnswer} from '../types/QuestionAnswer'
 import {QuestionTitle} from '../types/QuestionTitle'
 import {getOpenAIResponse} from '../features/open-ai/OpenAIAPI';
 import {questionDetailsAdd} from '../features/myenglish/MyEnglishAPI'
@@ -16,7 +14,7 @@ export class OpenAIService {
         "\n" +
         "答え: 1";
 
-     private convertAIDataToWrapper(responseAIData:string,questionTiltleId:number): QuestionDetailsWrapper | null{
+     private convertAIDataToWrapper(responseAIData:string,questionTiltleId:number): QuestionDetails | null{
         console.log(responseAIData)
         //正規表現で文字列を抜き出す
         const questionWordMatch = responseAIData.match(/^問題:\s*([\s\S]*?)\s*選択肢:/);
@@ -32,64 +30,42 @@ export class OpenAIService {
         const answerCandidateNo2 = answerCandidateNo2Match ? answerCandidateNo2Match[1] :null;
         const answerCandidateNo3 = answerCandidateNo3Match ? answerCandidateNo3Match[1] :null;
         const answerCandidateNo4 = answerCandidateNo4Match ? answerCandidateNo4Match[1] :null;
-        const answerIdString = answerIdMatch ? answerIdMatch[1]: null;
-        let answerId : number|null;
+        const answerNumberString = answerIdMatch ? answerIdMatch[1]: null;
+        let answerNumber : number|null;
 
         let questionDetails : QuestionDetails;
-        let questionAnswer : QuestionAnswer;
-        let questionDetailsWrapper : QuestionDetailsWrapper
 
-        if(questionWord == null){
+         if(answerNumberString == null){
+             console.log("convertAIDataToWrapperでnull (answerNumberString)")
+             return null;
+         }else{
+             const result = answerNumberString.match(/\d+/);
+             console.log("result=",result);
+             answerNumber = result ? parseInt(result[0], 10) : null;
+         }
+
+        if(questionWord == null || answerCandidateNo1 == null || answerCandidateNo2 == null ||
+        answerCandidateNo3 == null || answerCandidateNo4 == null ||
+        answerNumber == null){
             console.log("convertAIDataToWrapperでnull (questionWord)")
-            return null;
-        }else{
-            questionDetails = {
-                questionDetailsId : 0,
-                questionTitleId : questionTiltleId,
-                questionWord : questionWord
-            };
-        }
-
-        if(answerIdString == null){
-            console.log("convertAIDataToWrapperでnull (answerIdString)")
-            return null;
-        }else{
-            const result = answerIdString.match(/\d+/);
-            console.log("result=",result);
-            answerId = result ? parseInt(result[0], 10) : null;
-        }
-
-        if(
-            answerCandidateNo1 == null || answerCandidateNo2 == null ||
-            answerCandidateNo3 == null || answerCandidateNo4 == null ||
-            answerId == null
-        ){
             console.log("answerCandidata1",answerCandidateNo1);
             console.log("answerCandidata2",answerCandidateNo2);
             console.log("answerCandidata3",answerCandidateNo3);
             console.log("answerCandidata4",answerCandidateNo4);
             return null;
         }else{
-            questionAnswer = {
-                questionAnswerId : 0,
-                questionTitleId : questionTiltleId,
+            questionDetails = {
                 questionDetailsId : 0,
-                answerId : answerId,
+                questionTitleId : questionTiltleId,
+                questionWord : questionWord,
+                answerNumber : answerNumber,
                 answerCandidateNo1 : answerCandidateNo1,
                 answerCandidateNo2 : answerCandidateNo2,
                 answerCandidateNo3 : answerCandidateNo3,
                 answerCandidateNo4 : answerCandidateNo4
-            }
+            };
         }
-
-
-        questionDetailsWrapper = {
-            myEnglishQuizDetailsForm : questionDetails,
-            myEnglishQuizAnswerForm : questionAnswer
-        }
-
-
-        return questionDetailsWrapper;
+        return questionDetails;
     }
 
     async generateAIQuestion (base64Image:string[],questionTitle:QuestionTitle): Promise<string>{

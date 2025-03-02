@@ -1,20 +1,20 @@
 import axios from 'axios';
 // myenglish-server-service
-// const requestQuestionTitleBaseUrl =  'http://localhost:8080/quizrest';
-// const requestQuestionDetailsBaseUrl = "http://localhost:8080/quizdetailsrest";
-// const requestTakeQuestionBaseUrl = "http://localhost:8080/takequizrest/";
-// const requestLoginConfirmBaseUrl = "http://localhost:8080/login/confirm";
-// const authLoginUrl = "http://localhost:8080/login"
+const requestQuestionTitleBaseUrl =  'http://localhost:8080/quizrest';
+const requestQuestionDetailsBaseUrl = "http://localhost:8080/quizdetailsrest";
+const requestTakeQuestionBaseUrl = "http://localhost:8080/takequizrest/";
+const requestLoginConfirmBaseUrl = "http://localhost:8080/login/confirm";
+const authLoginUrl = "http://localhost:8080/login"
 
 // const requestQuestionTitleBaseUrl =  'http://myenglish-server-service.myenglish.svc.cluster.local:8080/quizrest';
 // const requestQuestionDetailsBaseUrl = "http://myenglish-server-service.myenglish.svc.cluster.local:8080/quizdetailsrest";
 // const requestTakeQuestionBaseUrl = "http://myenglish-server-service.myenglish.svc.cluster.local:8080/takequizrest/";
 // const requestLoginConfirmBaseUrl = "http://myenglish-server-service.myenglish.svc.cluster.local:8080/login/confirm";
-const requestQuestionTitleBaseUrl =  'http://localhost:8082/quizrest';
-const requestQuestionDetailsBaseUrl = "http://localhost:8082/quizdetailsrest";
-const requestTakeQuestionBaseUrl = "http://localhost:8082/takequizrest/";
-const requestLoginConfirmBaseUrl = "http://localhost:8082/login/confirm";
-const authLoginUrl = "http://localhost:8082/login"
+// const requestQuestionTitleBaseUrl =  'http://localhost:8082/quizrest';
+// const requestQuestionDetailsBaseUrl = "http://localhost:8082/quizdetailsrest";
+// const requestTakeQuestionBaseUrl = "http://localhost:8082/takequizrest/";
+// const requestLoginConfirmBaseUrl = "http://localhost:8082/login/confirm";
+// const authLoginUrl = "http://localhost:8082/login"
 axios.defaults.withCredentials = true;
 
 
@@ -55,32 +55,22 @@ export const questionTitleDelete = async (questionTitle) => {
     }
 }
 
-export const questionDetailsAdd = async (questionDetailsWrapper) => {
+export const questionDetailsAdd = async (questionDetails) => {
     try {
-        return await axios.post(requestQuestionDetailsBaseUrl + '/save', questionDetailsWrapper);
+        return await axios.post(requestQuestionDetailsBaseUrl + '/save', questionDetails);
     } catch (error) {
         throw error;
     }
 }
 
 
-export const questionDetailsUpdate = async (questionDetailsWrapper) => {
+export const questionDetailsUpdate = async (questionDetails) => {
     try {
-        return await axios.post(requestQuestionDetailsBaseUrl + '/update', questionDetailsWrapper);
+        return await axios.post(requestQuestionDetailsBaseUrl + '/update', questionDetails);
     } catch (error) {
         throw error;
     }
 }
-
-export const questionDetailsEdit = async (questionDetails) => {
-    try {
-        const response = await axios.post(requestQuestionDetailsBaseUrl + '/edit', questionDetails);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
 export const questionDetailsGet = async (questionTitle) => {
     try {
         const response = await axios.post(requestQuestionDetailsBaseUrl + "/all", questionTitle);
