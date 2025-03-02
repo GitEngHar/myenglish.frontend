@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import {OpenAIService} from '../utils/OpenAIService';
+// import {OpenAIService} from '../utils/OpenAIService';
 import {useLocation} from "react-router-dom";
 import BackToQuizDetails from "../components/BackToQuizDetails";
+import {OpenAIService} from "../utils/OpenAIService";
 
 const AIQuiz: React.FC = () =>{
 	const [input, setInput] = useState('');
