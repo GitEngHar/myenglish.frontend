@@ -51,9 +51,9 @@ const QuizMain: React.FC = () =>{
 		setIsEdit(false);
 		setEditIndex(-1);
 		// APIで送信
-		const resposne = await questionTitleUpdate(sendQuestionTitle);
-		console.log(resposne);
-
+		const resposne: any = await questionTitleUpdate(sendQuestionTitle);
+		// TODO: response code に応じて処理をする
+		console.log(resposne.status)
 	}
 
 	const showModal = () => {
@@ -80,7 +80,7 @@ const QuizMain: React.FC = () =>{
 		setEditQuestionTitles(_.cloneDeep(newQuestionTitles));
 		setAddQuizTitle("");
 		setIsViewModal(false);
-		window.location.reload()
+		window.location.reload() //サイトを更新して問題情報をサーバと同期する
 	}
 
 	const deleteQuestion = (index:number) => async () => {
