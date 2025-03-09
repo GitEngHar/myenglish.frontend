@@ -26,7 +26,7 @@ export const questionTitleSave = async (questionTitle) => {
     try{
         return await axios.post(requestQuestionTitleBaseUrl+'/save', questionTitle);
     }catch (error){
-        throw error;
+        return error;
     }
 }
 
@@ -34,7 +34,7 @@ export const questionTitleUpdate = async (newQuestionTitle) => {
     try{
         return await axios.post(requestQuestionTitleBaseUrl+'/update', newQuestionTitle);
     }catch (error){
-        throw error;
+        return error
     }
 }
 
@@ -43,7 +43,7 @@ export const questionTitleGet = async ()=> {
         const response = await axios.get(requestQuestionTitleBaseUrl)
         return response.data;
     }catch (error){
-        throw error;
+        return error;
     }
 }
 
@@ -51,7 +51,7 @@ export const questionTitleDelete = async (questionTitle) => {
     try{
         return await axios.post(requestQuestionTitleBaseUrl+'/delete', questionTitle);
     }catch (error){
-        throw error;
+        return error;
     }
 }
 
@@ -59,7 +59,7 @@ export const questionDetailsAdd = async (questionDetails) => {
     try {
         return await axios.post(requestQuestionDetailsBaseUrl + '/save', questionDetails);
     } catch (error) {
-        throw error;
+        return error;
     }
 }
 
@@ -68,7 +68,7 @@ export const questionDetailsUpdate = async (questionDetails) => {
     try {
         return await axios.post(requestQuestionDetailsBaseUrl + '/update', questionDetails);
     } catch (error) {
-        throw error;
+        return error;
     }
 }
 export const questionDetailsGet = async (questionTitle) => {
@@ -76,7 +76,7 @@ export const questionDetailsGet = async (questionTitle) => {
         const response = await axios.post(requestQuestionDetailsBaseUrl + "/all", questionTitle);
         return response.data;
     } catch (error) {
-        throw error;
+        return error;
     }
 }
 
@@ -84,7 +84,7 @@ export const questionDetailsDelete = async (details) => {
     try {
         return await axios.post(requestQuestionDetailsBaseUrl + '/delete', details);
     } catch (error) {
-        throw error;
+        return error;
     }
 }
 
@@ -93,7 +93,7 @@ export const takeQuizGet = async (questionTitle) => {
         const response = await axios.post(requestTakeQuestionBaseUrl, questionTitle);
         return response.data;
     } catch (error) {
-        throw error;
+        return error;
     }
 }
 
@@ -102,7 +102,7 @@ export const loginConfirmGet = async () => {
         const response = await axios.get(requestLoginConfirmBaseUrl);
         return response.data;
     } catch (error) {
-        throw error;
+        return error;
     }
 }
 
