@@ -131,7 +131,11 @@ const QuizMain: React.FC = () =>{
 					toggleEditMode={toggleEditMode}
 					deleteQuestion={deleteQuestion}
 				/>
-				<button onClick={showModal}>タイトルを追加</button>
+
+				<div className="under-button-set">
+					<button className="save-button" onClick={showModal}>タイトルを追加</button>
+				</div>
+
 				<Modal
 					isViewModal={isViewModal}
 					closeModal={closeModal}

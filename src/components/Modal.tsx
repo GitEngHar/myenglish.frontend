@@ -29,8 +29,8 @@ export const Modal = (props :any) => {
                 <div id="overray" style={overlay}>
                     <div id="modalContent" style={modalContent}>
                         {viewElements}
-                        <button onClick={requestAPI}>送信</button>
-                        <button onClick={closeModal}>Close</button>
+                        <button className="save-button" onClick={requestAPI}>Go</button>
+                        <button className="delete-button" onClick={closeModal}>Close</button>
                     </div>
                 </div>
             </>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './index.css';
+import './style.css';
 import QuizMain from './pages/QuizMain';
 import QuizDetails from './pages/QuizDetails';
 import TakeQuiz from './pages/TakeQuiz';

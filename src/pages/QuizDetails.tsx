@@ -156,18 +156,23 @@ const QuizDetails: React.FC = () =>{
 				handleGotoAIQuiz={gotoAIQuiz}
 				goToTakeQuiz={goToTakeQuiz}
 			/>
-			<button onClick={showQuestionAddModal}>設問を追加</button>
 			<Modal
 				isViewModal={isQuestionAddViewModal}
 				closeModal={closeQuestionAddModal}
 				viewElements={
 					<>
-						<input placeholder="設問を入力してください" value={questionWord} data-key="questionWord" onChange={detailAddViewForm}></input>
-						<input placeholder="回答候補1" value={answerCandidateNo1} data-key="answerCandidateNo1" onChange={detailAddViewForm}></input>
-						<input placeholder="回答候補2" value={answerCandidateNo2} data-key="answerCandidateNo2" onChange={detailAddViewForm}></input>
-						<input placeholder="回答候補3" value={answerCandidateNo3} data-key="answerCandidateNo3" onChange={detailAddViewForm}></input>
-						<input placeholder="回答候補4" value={answerCandidateNo4} data-key="answerCandidateNo4" onChange={detailAddViewForm}></input>
-						<input placeholder="答えの番号を入力" data-key="answerNumber" value={answerNumber} onChange={detailAddViewForm}></input>
+						<input placeholder="設問を入力してください" value={questionWord} data-key="questionWord"
+							   onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補1" value={answerCandidateNo1} data-key="answerCandidateNo1"
+							   onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補2" value={answerCandidateNo2} data-key="answerCandidateNo2"
+							   onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補3" value={answerCandidateNo3} data-key="answerCandidateNo3"
+							   onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補4" value={answerCandidateNo4} data-key="answerCandidateNo4"
+							   onChange={detailAddViewForm}></input>
+						<input placeholder="答えの番号を入力" data-key="answerNumber" value={answerNumber}
+							   onChange={detailAddViewForm}></input>
 					</>
 				}
 				requestAPI={questionDetailsAddHandler}
@@ -176,21 +181,30 @@ const QuizDetails: React.FC = () =>{
 				isViewModal={isQuestionEditViewModal}
 				closeModal={closeQuestionEditViewModal}
 				viewElements={
-				//TODO: 問題情報に紐づく回答情報がnullの場合の処理を書く
+					//TODO: 問題情報に紐づく回答情報がnullの場合の処理を書く
 					<>
 						<p>編集</p>
-						<input placeholder="設問を入力してください" value={questionWord} onChange={detailAddViewForm}></input>
-						<input placeholder="回答候補1" value={answerCandidateNo1} data-key="answerCandidateNo1" onChange={detailAddViewForm}></input>
-						<input placeholder="回答候補2" value={answerCandidateNo2} data-key="answerCandidateNo2" onChange={detailAddViewForm}></input>
-						<input placeholder="回答候補3" value={answerCandidateNo3} data-key="answerCandidateNo3" onChange={detailAddViewForm}></input>
-						<input placeholder="回答候補4" value={answerCandidateNo4} data-key="answerCandidateNo4" onChange={detailAddViewForm}></input>
-						<input placeholder="答えの番号を入力" data-key="answerNumber" value={answerNumber} onChange={detailAddViewForm}></input>
+						<input placeholder="設問を入力してください" value={questionWord}
+							   onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補1" value={answerCandidateNo1} data-key="answerCandidateNo1"
+							   onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補2" value={answerCandidateNo2} data-key="answerCandidateNo2"
+							   onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補3" value={answerCandidateNo3} data-key="answerCandidateNo3"
+							   onChange={detailAddViewForm}></input>
+						<input placeholder="回答候補4" value={answerCandidateNo4} data-key="answerCandidateNo4"
+							   onChange={detailAddViewForm}></input>
+						<input placeholder="答えの番号を入力" data-key="answerNumber" value={answerNumber}
+							   onChange={detailAddViewForm}></input>
 					</>
 				}
 				requestAPI={questionDetailsUpdateHandler}
 			/>
-
-			<GoToHome/>
+			<div className="under-button-set">
+				<button className="save-button" onClick={showQuestionAddModal}>設問を追加</button>
+				<button className="start-button" onClick={goToTakeQuiz}>Start</button>
+				<GoToHome/>
+			</div>
 		</>
 	)
 

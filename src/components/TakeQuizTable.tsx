@@ -66,28 +66,36 @@ const TakeQuizTable: React.FC = () =>{
 
 	/* クイズ出題ページ */
 	return (
-		<div>
-			<label>問題 : {questionDetails.questionWord}</label>
-            <li>{questionDetails.answerCandidateNo1}</li>
-            <li>{questionDetails.answerCandidateNo2}</li>
-            <li>{questionDetails.answerCandidateNo3}</li>
-            <li>{questionDetails.answerCandidateNo4}</li>
-            <p>
+        <>
+            <div className="take-question-box">
+                <label className="take-question-title">問題 : {questionDetails.questionWord}</label>
+                <ul className="take-question-candidate">
+                    <li>{questionDetails.answerCandidateNo1}</li>
+                    <li>{questionDetails.answerCandidateNo2}</li>
+                    <li>{questionDetails.answerCandidateNo3}</li>
+                    <li>{questionDetails.answerCandidateNo4}</li>
+                </ul>
+            </div>
+
+            <div className="take-question-answer">
                 <form onSubmit={handleAnswer}>
                     <input type="number" onChange={handleAnswerChange}></input>
-                    <button type="submit">解答</button>
+                    <button className="save-button" type="submit">解答</button>
                 </form>
-            </p>
+            </div>
             <p>
                 <label>結果 : {answerResult}</label>
             </p>
-            <div>
-			    <button onClick={handleBackQuestion}>back</button>
-			    <button onClick={handleNextQuestion}>next</button>
+            <div className="take-question-move">
+                <button className="edit-button" onClick={handleBackQuestion}>back</button>
+                <button className="edit-button" onClick={handleNextQuestion}>next</button>
             </div>
-            <GoToHome/>
-		</div>
-	)
+            <div className="under-button-set">
+                <GoToHome/>
+            </div>
+
+        </>
+    )
 
 }
 
