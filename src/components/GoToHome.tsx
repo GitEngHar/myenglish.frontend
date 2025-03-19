@@ -7,7 +7,7 @@ const GoToHome: React.FC = () =>{
         navigate("/");
     }
     return (
-        <button onClick={goToHome}>Homeへ戻る</button>
+        <button className="back-button" onClick={goToHome}>Homeへ戻る</button>
     )
 }
 export default GoToHome;

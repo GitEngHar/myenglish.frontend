@@ -14,18 +14,17 @@ export const QuestionDetailsView = (props: any) => {
             <h1>Question Details</h1>
             {
                 questionDetails.map((details:QuestionDetails) => (
-                        <div>
-                            <li key={details.questionDetailsId}>{details.questionWord}</li>
-                            <button onClick={() => handleEditClick(details)}>edit</button>
-                            <button onClick={() => handleDeleteClick(details)}>delete</button>
-                        </div>
+                        <li className="row-item">
+                            <label className="question-label" key={details.questionDetailsId}>{details.questionWord}</label>
+                            <button className="edit-button" onClick={() => handleEditClick(details)}>編集</button>
+                            <button className="delete-button" onClick={() => handleDeleteClick(details)}>削除</button>
+                        </li>
                     )
                 )
             }
-            <p>
-                <button onClick={handleGotoAIQuiz}>AI-Add</button>
-                <button onClick={goToTakeQuiz}>Start</button>
-            </p>
+            {/*<p>*/}
+            {/*    <button className="save-button" onClick={handleGotoAIQuiz}>AI-Add</button>*/}
+            {/*</p>*/}
         </>
     )
 }

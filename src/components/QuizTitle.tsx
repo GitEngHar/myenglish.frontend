@@ -19,17 +19,17 @@ export const QuizTitle = (props:any) => {
             {questionTitles.length > 0 ?
                 questionTitles.map((questionTitle: QuestionTitle, index: number) => (
                     editIndex === index && isEdit ?
-                        <li>
+                        <li className="row-item">
                             <input value={editQuestionTitles[index].questionTitle}
                                    onChange={editTitleViewForm(index)}></input>
-                            <button onClick={editSave(index)}>保存</button>
-                            <button onClick={editCancel}>キャンセル</button>
+                            <button className="save-button" onClick={editSave(index)}>保存</button>
+                            <button className="delete-button" onClick={editCancel}>キャンセル</button>
                         </li>
                         :
-                        <li>
-                            <p onClick={() => GotoQuizDetails(questionTitle)}>{questionTitle.questionTitle}</p>
-                            <button onClick={toggleEditMode(index)}>編集</button>
-                            <button onClick={deleteQuestion(index)}>削除</button>
+                        <li className="row-item">
+                            <label className="question-label" onClick={() => GotoQuizDetails(questionTitle)}>{questionTitle.questionTitle}</label>
+                            <button className="edit-button" onClick={toggleEditMode(index)}>編集</button>
+                            <button className="delete-button" onClick={deleteQuestion(index)}>削除</button>
                         </li>
 
                 )) :
