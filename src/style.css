@@ -1,3 +1,5 @@
+
+/*** 共通コンポーネント ****/
 .main{
   display: flex;
   font-family: sans-serif;
@@ -9,38 +11,6 @@
 
 .under-button-set{
   margin-top: 5em;
-}
-
-.take-question-box{
-  width: fit-content;
-}
-
-.take-question-candidate {
-  list-style-type: none;
-  padding: 1em;
-  border: 2px solid #2589d0;
-  counter-reset: li;
-}
-
-.take-question-candidate li {
-  display: flex;
-  align-items: center;
-  padding: .3em;
-}
-
-.take-question-candidate li::before {
-  display: inline-block;
-  min-width: 1.7em;
-  margin-right: 5px;
-  border-radius: 50%;
-  background-color: #2589d0;
-  color: #fff;
-  font-weight: bold;
-  font-size: .75em;
-  line-height: 1.7em;
-  text-align: center;
-  content: counter(li);
-  counter-increment: li;
 }
 
 input{
@@ -59,6 +29,7 @@ button{
   padding: 4px 16px;
   margin-left: 20px;
 }
+
 
 .back-button:hover{
   background-color: #666666;
@@ -90,6 +61,42 @@ button{
   cursor: pointer;
 }
 
+
+/*** クイズに挑戦画面 ****/
+.take-question-box{
+  width: fit-content;
+}
+
+.take-question-candidate {
+  list-style-type: none;
+  padding: 1em;
+  font-size: 1.25em;
+  border: 2px solid #2589d0;
+  counter-reset: li;
+}
+
+.take-question-candidate li {
+  display: flex;
+  align-items: center;
+  padding: .3em;
+}
+
+.take-question-candidate li::before {
+  display: inline-block;
+  min-width: 1.7em;
+  margin-right: 5px;
+  border-radius: 50%;
+  background-color: #2589d0;
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.75em;
+  line-height: 1.7em;
+  text-align: center;
+  content: counter(li);
+  counter-increment: li;
+}
+
+/** 問題タイトル・問題詳細画面 */
 .question-label:hover{
   color: #1D4ED8;
   cursor: pointer;
@@ -97,10 +104,12 @@ button{
 
 .question-label{
   color: #333333;
+  font-size: 1.25em;
 }
 
 .take-question-title{
   padding: 1rem 2rem;
+  font-size: 1.25em;
   border-left: 6px double #1E3A8A;
   background: #E3EFFF;
 }
@@ -108,7 +117,7 @@ button{
 .row-item{
   border-left: solid 6px #1E3A8A;/*左側の線*/
   background: #E3EFFF;/*背景色*/
-  margin-bottom: 3px;/*下のバーとの余白*/
+  margin-bottom: 0.75em;/*下のバーとの余白*/
   line-height: 1.5;
   padding: 0.5em;
   width: fit-content;
@@ -133,31 +142,22 @@ button{
   min-height: 200px;
 }
 
-.complete-area{
-  background-color: #c9dede;
-  border: 2px solid #aacfd0;
-  width: 400px;
-  padding: 8px;
-  margin: 8px;
-  border-radius: 8px;
-  min-height: 200px;
-}
 
 .title{
-  text-align: center;
-  margin-top: 0;
-  font-weight: bold;
+
 }
 
 .list-row{
-  display: flex;
-  align-items: center;
+
 }
 .todo-item{
   margin: 6px;
 }
 
 h1{
-  font-size: 3em;
+  font-size: 3.5em;
+  text-align: center;
+  margin-top: 0;
+  font-weight: bold;
   color: #60A5FA;
 }
