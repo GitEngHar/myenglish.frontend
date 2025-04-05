@@ -1,20 +1,11 @@
 import axios from 'axios';
 // myenglish-server-service
-const requestQuestionTitleBaseUrl =  'http://localhost:8080/quizrest';
-const requestQuestionDetailsBaseUrl = "http://localhost:8080/quizdetailsrest";
-const requestTakeQuestionBaseUrl = "http://localhost:8080/takequizrest/";
-const requestLoginConfirmBaseUrl = "http://localhost:8080/login/confirm";
-const authLoginUrl = "http://localhost:8080/login"
+const requestQuestionTitleBaseUrl =  process.env.REACT_APP_SERVER_DOMAIN + '/quizrest';
+const requestQuestionDetailsBaseUrl = process.env.REACT_APP_SERVER_DOMAIN + '/quizdetailsrest';
+const requestTakeQuestionBaseUrl = process.env.REACT_APP_SERVER_DOMAIN + '/takequizrest';
+const requestLoginConfirmBaseUrl = process.env.REACT_APP_SERVER_DOMAIN + '/login/confirm';
+const authLoginUrl = process.env.REACT_APP_SERVER_LOGIN_DOMAIN;
 
-// const requestQuestionTitleBaseUrl =  'http://myenglish-server-service.myenglish.svc.cluster.local:8080/quizrest';
-// const requestQuestionDetailsBaseUrl = "http://myenglish-server-service.myenglish.svc.cluster.local:8080/quizdetailsrest";
-// const requestTakeQuestionBaseUrl = "http://myenglish-server-service.myenglish.svc.cluster.local:8080/takequizrest/";
-// const requestLoginConfirmBaseUrl = "http://myenglish-server-service.myenglish.svc.cluster.local:8080/login/confirm";
-// const requestQuestionTitleBaseUrl =  'http://localhost:8082/quizrest';
-// const requestQuestionDetailsBaseUrl = "http://localhost:8082/quizdetailsrest";
-// const requestTakeQuestionBaseUrl = "http://localhost:8082/takequizrest/";
-// const requestLoginConfirmBaseUrl = "http://localhost:8082/login/confirm";
-// const authLoginUrl = "http://localhost:8082/login"
 axios.defaults.withCredentials = true;
 
 
