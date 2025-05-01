@@ -1,5 +1,46 @@
 import {QuizDetails} from "../domain/QuizDetails";
+import {QuizTitle} from "../domain/QuizTitle";
+
+export interface IQuizDetailsRepository {
+    get(quizTitle:QuizTitle): Promise<QuizDetails>
+    add(quizDetails:QuizDetails): Promise<void>
+    update(quizDetails:QuizDetails): Promise<void>
+    delete(quizDetails:QuizDetails): Promise<void>
+}
 
 export class QuizDetailsRepository {
-
+    // TODO: /quizdetails/getに変更する
+    // TODO: GETメソッドにする
+    async get(quizTitle:QuizTitle): Promise<QuizDetails>{
+        const response = await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/quizdetailsrest/all`,{
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ QuestionTitleForm: quizTitle }),
+        })
+        return response.json()
+    }
+    // TODO: /quizdetails/addに変更する
+    async save(quizDetails:QuizDetails): Promise<void> {
+        await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/quizdetailsrest/save`,{
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ QuestionDetailsForm: quizDetails }),
+        })
+    }
+    // TODO: /quizdetails/updateに変更する
+    async update(quizDetails:QuizDetails): Promise<void> {
+        await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/quizdetailsrest/update`,{
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ QuestionDetailsForm: quizDetails }),
+        })
+    }
+    // TODO: /quizdetails/deleteに変更する
+    async delete(quizDetails:QuizDetails): Promise<void>{
+        await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/quizdetailsrest/delete`,{
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ QuestionDetailsForm: quizDetails }),
+        })
+    }
 }
