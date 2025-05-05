@@ -7,7 +7,7 @@ export class GetQuizTitleService{
     ) {}
     async execute(): Promise<QuizTitle>{
         // quizTitleを取得
-        let quizTitle : QuizTitle = await this.quizTitleRepository.get()
+        const quizTitle : QuizTitle = await this.quizTitleRepository.get()
         // 何もない場合エラーにする
         if(!quizTitle){
             // TODO: クイズが存在しない場合は登録を促す仕様にする
