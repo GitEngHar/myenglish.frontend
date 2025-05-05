@@ -1,10 +1,9 @@
 import axios from 'axios';
 // myenglish-server-service
-const requestQuestionTitleBaseUrl =  'http://localhost:8080/quizrest';
-const requestQuestionDetailsBaseUrl = "http://localhost:8080/quizdetailsrest";
-const requestTakeQuestionBaseUrl = "http://localhost:8080/takequizrest/";
-const requestLoginConfirmBaseUrl = "http://localhost:8080/login/confirm";
-const authLoginUrl = "http://localhost:8080/login"
+const requestQuestionTitleBaseUrl =  `${process.env.REACT_APP_SERVER_DOMAIN}/quizrest`;
+const requestQuestionDetailsBaseUrl = `${process.env.REACT_APP_SERVER_DOMAIN}/quizdetailsrest`;
+const requestLoginConfirmBaseUrl = `${process.env.REACT_APP_SERVER_LOGIN_API_DOMAIN}/confirm`;
+const authLoginUrl = `${process.env.REACT_APP_SERVER_LOGIN_DOMAIN}`
 
 // const requestQuestionTitleBaseUrl =  'http://myenglish-server-service.myenglish.svc.cluster.local:8080/quizrest';
 // const requestQuestionDetailsBaseUrl = "http://myenglish-server-service.myenglish.svc.cluster.local:8080/quizdetailsrest";
@@ -83,15 +82,6 @@ export const questionDetailsGet = async (questionTitle) => {
 export const questionDetailsDelete = async (details) => {
     try {
         return await axios.post(requestQuestionDetailsBaseUrl + '/delete', details);
-    } catch (error) {
-        return error;
-    }
-}
-
-export const takeQuizGet = async (questionTitle) => {
-    try {
-        const response = await axios.post(requestTakeQuestionBaseUrl, questionTitle);
-        return response.data;
     } catch (error) {
         return error;
     }
