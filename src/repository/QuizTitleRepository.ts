@@ -11,7 +11,10 @@ export interface IQuizTitleRepository {
 export class QuizTitleRepository implements IQuizTitleRepository{
     // TODO: /quiz/getに変更する
     async get(): Promise<QuizTitle>{
-        const response = await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/quizrest`)
+        const response = await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/quizrest`,{
+            method: 'GET',
+            credentials: 'include',
+        })
         return response.json()
     }
     // TODO: /quiz/addに変更する
