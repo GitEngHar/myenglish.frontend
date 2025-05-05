@@ -1,7 +1,8 @@
 import {QuizTitle} from "../domain/QuizTitle";
+import {QuizTitleDTO} from "../dto/QuizTitleDTO";
 
 export interface IQuizTitleRepository {
-    get() : Promise<QuizTitle>
+    get() : Promise<QuizTitleDTO[]>
     // TODO: addに変更する
     save(quizTitle:QuizTitle) : Promise<void>
     update(quizTitle:QuizTitle) : Promise<void>
@@ -10,7 +11,7 @@ export interface IQuizTitleRepository {
 
 export class QuizTitleRepository implements IQuizTitleRepository{
     // TODO: /quiz/getに変更する
-    async get(): Promise<QuizTitle>{
+    async get(): Promise<QuizTitleDTO[]>{
         const response = await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/quizrest`,{
             method: 'GET',
             credentials: 'include',
