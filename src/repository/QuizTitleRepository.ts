@@ -5,7 +5,7 @@ export interface IQuizTitleRepository {
     get() : Promise<QuizTitleDTO[]>
     // TODO: addに変更する
     save(quizTitle:QuizTitle) : Promise<void>
-    update(quizTitle:QuizTitle) : Promise<void>
+    update(quizTitleDTO:QuizTitleDTO) : Promise<void>
     delete(quizTitle:QuizTitle) : Promise<void>
 }
 
@@ -27,11 +27,12 @@ export class QuizTitleRepository implements IQuizTitleRepository{
         })
     }
     // TODO: /quiz/updateに変更する
-    async update(quizTitle:QuizTitle): Promise<void> {
+    async update(quizTitleDTO:QuizTitleDTO): Promise<void> {
         await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/quizrest/update`,{
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ QuestionTitleForm: quizTitle }),
+            body: JSON.stringify(quizTitleDTO),
         })
     }
     // TODO: /quiz/deleteに変更する

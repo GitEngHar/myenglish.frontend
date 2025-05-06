@@ -1,11 +1,19 @@
 import {QuizTitle} from "../../domain/QuizTitle";
 import {QuizTitleRepository} from "../../repository/QuizTitleRepository";
+import {QuizTitleDTO} from "../../dto/QuizTitleDTO";
 
 export class UpdateQuizTitleService{
     constructor(
         private quizTitleRepository: QuizTitleRepository
     ) {}
-    async execute(quizTitle: QuizTitle): Promise<void>{
-        await this.quizTitleRepository.update(quizTitle)
+    private convertToDomainObj(quizTitleDTO: QuizTitleDTO): QuizTitle {
+        return new QuizTitle(
+            quizTitleDTO.questionTitleId,
+            quizTitleDTO.ownerUserId,
+            quizTitleDTO.questionTitle
+        )
+    }
+    async execute(quizTitleDTO: QuizTitleDTO): Promise<void>{
+        await this.quizTitleRepository.update(quizTitleDTO)
     }
 }
