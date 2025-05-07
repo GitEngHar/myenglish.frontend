@@ -11,8 +11,10 @@ import {RegisterQuizTitleService} from "../application/quiztitle/RegisterQuizTit
 import {UpdateQuizTitleService} from "../application/quiztitle/UpdateQuizTitleService";
 import _ from "lodash";
 import {DeleteQuizTitleService} from "../application/quiztitle/DeleteQuizTitleService";
+import {useNavigate} from "react-router-dom";
 
 const QuizTitle: React.FC = () => {
+    const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
     const [isShowModal, setIsShowModal] = useState(false)
@@ -36,7 +38,6 @@ const QuizTitle: React.FC = () => {
     // ログイン成功していれば、タイトルを取得する
     useEffect(() => {
         if(isLogin){
-
             quizTitleGetService.execute().then( res => {
                     setQuizTitles(res)
                     // 編集用のクイズタイトルの値へコピーをする
@@ -46,21 +47,21 @@ const QuizTitle: React.FC = () => {
         }
     }, [isLogin]);
 
-    const handleLogin = () => {
+    const handleRedirectLogin = () => {
         window.location.href = `${process.env.REACT_APP_SERVER_LOGIN_DOMAIN}`
     }
 
-    const handleEdit = (index:number) => {
+    const handleEditTitle = (index:number) => {
         setEditIndex(index)
         setIsEdit(true)
     }
 
-    const handleEditCancel = () => {
+    const handleEditTitleCancel = () => {
         setEditIndex(-1)
         setIsEdit(false)
     }
 
-    const handleEditSave = (index: number) => {
+    const handleEditTitleSave = (index: number) => {
         // 編集されたタイトル情報を送信用にコピー
         const quizTitleForSend = _.cloneDeep(editQuizTitles[index])
         quizTitleUpdateService.execute(quizTitleForSend).catch(() => console.log("Update Error"))
@@ -70,7 +71,7 @@ const QuizTitle: React.FC = () => {
         setIsEdit(false)
     }
 
-    const handleChangeTitle = (index:number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleEditTitleLoad = (index:number) => (event: React.ChangeEvent<HTMLInputElement>) => {
         // TODO: editQuizは全ての値をコピーする必要ないので修正する
         const newQuizEditTitles : QuizTitleDTO[] = _.cloneDeep(quizTitles)
         newQuizEditTitles[index].questionTitle =  event.target.value;
@@ -93,7 +94,7 @@ const QuizTitle: React.FC = () => {
         window.location.reload(); //サイトを更新して問題情報をサーバと同期する
     };
 
-    const handleChangeAddTitle = (event:any) => {
+    const handleAddTitleLoad = (event:any) => {
         setAddInputTitle(event.target.value);
     };
 
@@ -102,6 +103,10 @@ const QuizTitle: React.FC = () => {
         const deleteTargetTitleID : number = quizTitles[index].questionTitleId;
         const newQuestionTitles : QuizTitleDTO[] = quizTitles.filter(quizTitle => quizTitle.questionTitleId !== deleteTargetTitleID)
         setQuizTitles(newQuestionTitles)
+    }
+
+    const handleRedirectQuizDetails = (quizTitle: QuizTitleDTO) => {
+        navigate("/quizdetails",{state: {questionTitle:quizTitle}})
     }
 
     return (
@@ -115,17 +120,17 @@ const QuizTitle: React.FC = () => {
                                         <QuizTitleEdit
                                             index={index}
                                             quizTitles={editQuizTitles}
-                                            handleEditCancel={handleEditCancel}
-                                            handleEditChange={handleChangeTitle}
-                                            handleEditSave={handleEditSave}
+                                            handleEditTitleCancel={handleEditTitleCancel}
+                                            handleEditTitleLoad={handleEditTitleLoad}
+                                            handleEditTitleSave={handleEditTitleSave}
                                         />
                                     ) : (
                                         <QuizTitleView
                                             index={index}
                                             quizTitle={quizTitle}
-                                            quizEditIndex={index}
-                                            handleEdit={handleEdit}
-                                            handleDelete={handleDeleteTitle}
+                                            handleEditTitle={handleEditTitle}
+                                            handleDeleteTitle={handleDeleteTitle}
+                                            handleRedirectQuizDetails={handleRedirectQuizDetails}
                                         />
                                     )
                                 )) :
@@ -143,13 +148,13 @@ const QuizTitle: React.FC = () => {
                             handleCloseModal={handleCloseModal}
                             handleAddTitle={handleAddTitle}
                             addInputTitle={addInputTitle}
-                            handleChangeAddTitle={handleChangeAddTitle}
+                            handleChangeAddTitle={handleAddTitleLoad}
                         />
                     </div>
 
                 )
                 :
-                (<button onClick={handleLogin}>ログインする</button>)
+                (<button onClick={handleRedirectLogin}>ログインする</button>)
             }
         </>
     )
