@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {LoginConfirmUserService} from "../application/user/LoginConfirmUserService";
 import {GetQuizTitleService} from "../application/quiztitle/GetQuizTitleService";
 import {UserRepository} from "../repository/UserRepository"
@@ -10,6 +10,7 @@ import {QuizTitleModal} from "../componentsv2/QuizTitle/QuizTitleModal";
 import {RegisterQuizTitleService} from "../application/quiztitle/RegisterQuizTitleService";
 import {UpdateQuizTitleService} from "../application/quiztitle/UpdateQuizTitleService";
 import _ from "lodash";
+import {DeleteQuizTitleService} from "../application/quiztitle/DeleteQuizTitleService";
 
 const QuizTitle: React.FC = () => {
     const [isLogin, setIsLogin] = useState(false)
@@ -19,7 +20,11 @@ const QuizTitle: React.FC = () => {
     const [editQuizTitles, setEditQuizTitles] = useState<QuizTitleDTO[]>([])
     const [editIndex, setEditIndex] = useState(-1)
     const [addInputTitle, setAddInputTitle] = useState("")
-
+    const quizRepository = new QuizTitleRepository();
+    const quizTitleUpdateService = new UpdateQuizTitleService(quizRepository);
+    const quizTitleGetService = new GetQuizTitleService(quizRepository);
+    const quizTitleRegisterService = new RegisterQuizTitleService(quizRepository);
+    const quizTitleDeleteService = new DeleteQuizTitleService(quizRepository);
     // ログイン状態を把握する
     useEffect(() => {
         const userRepository =  new UserRepository();
@@ -31,9 +36,8 @@ const QuizTitle: React.FC = () => {
     // ログイン成功していれば、タイトルを取得する
     useEffect(() => {
         if(isLogin){
-            const quizRepository = new QuizTitleRepository();
-            const quizTitleService = new GetQuizTitleService(quizRepository);
-            quizTitleService.execute().then( res => {
+
+            quizTitleGetService.execute().then( res => {
                     setQuizTitles(res)
                     // 編集用のクイズタイトルの値へコピーをする
                     setEditQuizTitles(_.cloneDeep(res))
@@ -42,7 +46,7 @@ const QuizTitle: React.FC = () => {
         }
     }, [isLogin]);
 
-    const handleRedirect = () => {
+    const handleLogin = () => {
         window.location.href = `${process.env.REACT_APP_SERVER_LOGIN_DOMAIN}`
     }
 
@@ -59,9 +63,7 @@ const QuizTitle: React.FC = () => {
     const handleEditSave = (index: number) => {
         // 編集されたタイトル情報を送信用にコピー
         const quizTitleForSend = _.cloneDeep(editQuizTitles[index])
-        const quizRepository = new QuizTitleRepository();
-        const quizTitleService = new UpdateQuizTitleService(quizRepository);
-        quizTitleService.execute(quizTitleForSend).catch(() => console.log("Update Error"))
+        quizTitleUpdateService.execute(quizTitleForSend).catch(() => console.log("Update Error"))
         // 現在表示されている内容に変更後の値を反映
         setQuizTitles(editQuizTitles)
         setEditIndex(-1)
@@ -75,7 +77,7 @@ const QuizTitle: React.FC = () => {
         setEditQuizTitles(newQuizEditTitles);
     }
 
-    const showModal = () => {
+    const handleShowModal = () => {
         setIsShowModal(true);
     };
 
@@ -84,19 +86,23 @@ const QuizTitle: React.FC = () => {
     };
 
     const handleAddTitle = () => {
-        const newQuestionTitleId: number = 1;
-        const newQwnerUserId: number =1;
-        const newQuestionTitle: string = addInputTitle;
-        const quizRepository = new QuizTitleRepository();
-        const quizTitleRegisterService = new RegisterQuizTitleService(quizRepository);
-        quizTitleRegisterService.execute(newQuestionTitleId,newQwnerUserId,newQuestionTitle).catch(() => { console.log("Add Title ERROR") })
+        const newQuestionTitleId : number = 1;
+        const newQwnerUserId : number =1;
+        quizTitleRegisterService.execute(newQuestionTitleId,newQwnerUserId,addInputTitle).catch(() => { console.log("Add Title ERROR") });
         setIsShowModal(false);
-        window.location.reload() //サイトを更新して問題情報をサーバと同期する
+        window.location.reload(); //サイトを更新して問題情報をサーバと同期する
     };
 
     const handleChangeAddTitle = (event:any) => {
-        setAddInputTitle(event.target.value)
+        setAddInputTitle(event.target.value);
     };
+
+    const handleDeleteTitle = (index: number) => {
+        quizTitleDeleteService.execute(quizTitles[index]).catch(() => console.log("DELETE ERROR"));
+        const deleteTargetTitleID : number = quizTitles[index].questionTitleId;
+        const newQuestionTitles : QuizTitleDTO[] = quizTitles.filter(quizTitle => quizTitle.questionTitleId !== deleteTargetTitleID)
+        setQuizTitles(newQuestionTitles)
+    }
 
     return (
         <>
@@ -115,9 +121,11 @@ const QuizTitle: React.FC = () => {
                                         />
                                     ) : (
                                         <QuizTitleView
+                                            index={index}
                                             quizTitle={quizTitle}
                                             quizEditIndex={index}
                                             handleEdit={handleEdit}
+                                            handleDelete={handleDeleteTitle}
                                         />
                                     )
                                 )) :
@@ -128,7 +136,7 @@ const QuizTitle: React.FC = () => {
                             }
                         </ul>
                         <div className="under-button-set">
-                            <button className="save-button" onClick={showModal}>タイトルを追加</button>
+                            <button className="save-button" onClick={handleShowModal}>タイトルを追加</button>
                         </div>
                         <QuizTitleModal
                             isShowModal={isShowModal}
@@ -141,7 +149,7 @@ const QuizTitle: React.FC = () => {
 
                 )
                 :
-                (<button onClick={handleRedirect}>ログインする</button>)
+                (<button onClick={handleLogin}>ログインする</button>)
             }
         </>
     )
