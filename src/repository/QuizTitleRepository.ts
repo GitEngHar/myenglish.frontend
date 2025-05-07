@@ -4,7 +4,7 @@ import {QuizTitleDTO} from "../dto/QuizTitleDTO";
 export interface IQuizTitleRepository {
     get() : Promise<QuizTitleDTO[]>
     // TODO: addに変更する
-    save(quizTitle:QuizTitle) : Promise<void>
+    save(quizTitle:QuizTitleDTO) : Promise<void>
     update(quizTitleDTO:QuizTitleDTO) : Promise<void>
     delete(quizTitle:QuizTitle) : Promise<void>
 }
@@ -19,11 +19,12 @@ export class QuizTitleRepository implements IQuizTitleRepository{
         return response.json()
     }
     // TODO: /quiz/addに変更する
-    async save(quizTitle:QuizTitle): Promise<void> {
+    async save(quizTitleDTO:QuizTitleDTO): Promise<void> {
         await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/quizrest/save`,{
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ QuestionTitleForm: quizTitle }),
+            body: JSON.stringify(quizTitleDTO),
         })
     }
     // TODO: /quiz/updateに変更する
@@ -39,6 +40,7 @@ export class QuizTitleRepository implements IQuizTitleRepository{
     async delete(quizTitle:QuizTitle): Promise<void>{
         await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/quizrest/delete`,{
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ QuestionTitleForm: quizTitle }),
         })

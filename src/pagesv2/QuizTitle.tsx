@@ -6,15 +6,19 @@ import {QuizTitleRepository} from "../repository/QuizTitleRepository";
 import {QuizTitleDTO} from "../dto/QuizTitleDTO";
 import {QuizTitleView} from "../componentsv2/QuizTitle/QuizTitleView";
 import {QuizTitleEdit} from "../componentsv2/QuizTitle/QuizTitleEdit";
-import _ from "lodash";
+import {QuizTitleModal} from "../componentsv2/QuizTitle/QuizTitleModal";
+import {RegisterQuizTitleService} from "../application/quiztitle/RegisterQuizTitleService";
 import {UpdateQuizTitleService} from "../application/quiztitle/UpdateQuizTitleService";
+import _ from "lodash";
 
 const QuizTitle: React.FC = () => {
     const [isLogin, setIsLogin] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
+    const [isShowModal, setIsShowModal] = useState(false)
     const [quizTitles, setQuizTitles] = useState<QuizTitleDTO[]>([])
     const [editQuizTitles, setEditQuizTitles] = useState<QuizTitleDTO[]>([])
-    const [isEdit, setIsEdit] = useState(false)
     const [editIndex, setEditIndex] = useState(-1)
+    const [addInputTitle, setAddInputTitle] = useState("")
 
     // ログイン状態を把握する
     useEffect(() => {
@@ -71,33 +75,73 @@ const QuizTitle: React.FC = () => {
         setEditQuizTitles(newQuizEditTitles);
     }
 
+    const showModal = () => {
+        setIsShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsShowModal(false);
+    };
+
+    const handleAddTitle = () => {
+        const newQuestionTitleId: number = 1;
+        const newQwnerUserId: number =1;
+        const newQuestionTitle: string = addInputTitle;
+        const quizRepository = new QuizTitleRepository();
+        const quizTitleRegisterService = new RegisterQuizTitleService(quizRepository);
+        quizTitleRegisterService.execute(newQuestionTitleId,newQwnerUserId,newQuestionTitle).catch(() => { console.log("Add Title ERROR") })
+        setIsShowModal(false);
+        window.location.reload() //サイトを更新して問題情報をサーバと同期する
+    };
+
+    const handleChangeAddTitle = (event:any) => {
+        setAddInputTitle(event.target.value)
+    };
 
     return (
         <>
             <h1>MyEnglish Title</h1>
             {isLogin ? (
-                <ul>
-                    {quizTitles.length > 0 ? quizTitles.map((quizTitle: QuizTitleDTO, index: number) => (
-                            isEdit ? (
-                                <QuizTitleEdit
-                                    index={index}
-                                    quizTitles={editQuizTitles}
-                                    handleEditCancel={handleEditCancel}
-                                    handleEditChange={handleChangeTitle}
-                                    handleEditSave={handleEditSave}
-                                />
-                            ) : (
-                                <QuizTitleView
-                                    quizTitle={quizTitle}
-                                    quizEditIndex = {index}
-                                    handleEdit = {handleEdit}
-                                />
-                            )
-                        )) :
-                        <li>何もないから追加してね</li>
-                    }
-                </ul>
-                ) : (<button onClick={handleRedirect}>ログインする</button>)
+                    <div>
+                        <ul>
+                            {quizTitles.length > 0 ? quizTitles.map((quizTitle: QuizTitleDTO, index: number) => (
+                                    editIndex === index && isEdit ? (
+                                        <QuizTitleEdit
+                                            index={index}
+                                            quizTitles={editQuizTitles}
+                                            handleEditCancel={handleEditCancel}
+                                            handleEditChange={handleChangeTitle}
+                                            handleEditSave={handleEditSave}
+                                        />
+                                    ) : (
+                                        <QuizTitleView
+                                            quizTitle={quizTitle}
+                                            quizEditIndex={index}
+                                            handleEdit={handleEdit}
+                                        />
+                                    )
+                                )) :
+                                <div>
+                                    <li>何もないから追加してね</li>
+                                </div>
+
+                            }
+                        </ul>
+                        <div className="under-button-set">
+                            <button className="save-button" onClick={showModal}>タイトルを追加</button>
+                        </div>
+                        <QuizTitleModal
+                            isShowModal={isShowModal}
+                            handleCloseModal={handleCloseModal}
+                            handleAddTitle={handleAddTitle}
+                            addInputTitle={addInputTitle}
+                            handleChangeAddTitle={handleChangeAddTitle}
+                        />
+                    </div>
+
+                )
+                :
+                (<button onClick={handleRedirect}>ログインする</button>)
             }
         </>
     )
