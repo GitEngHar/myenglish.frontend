@@ -16,21 +16,22 @@ import {useNavigate} from "react-router-dom";
 const QuizTitle: React.FC = () => {
     const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(false)
-    const [isEdit, setIsEdit] = useState(false)
     const [isShowModal, setIsShowModal] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
     const [quizTitles, setQuizTitles] = useState<QuizTitleDTO[]>([])
     const [editQuizTitles, setEditQuizTitles] = useState<QuizTitleDTO[]>([])
     const [editIndex, setEditIndex] = useState(-1)
     const [addInputTitle, setAddInputTitle] = useState("")
+    const userRepository =  new UserRepository();
+    const loginConfirmUserService = new LoginConfirmUserService(userRepository);
     const quizRepository = new QuizTitleRepository();
     const quizTitleUpdateService = new UpdateQuizTitleService(quizRepository);
     const quizTitleGetService = new GetQuizTitleService(quizRepository);
     const quizTitleRegisterService = new RegisterQuizTitleService(quizRepository);
     const quizTitleDeleteService = new DeleteQuizTitleService(quizRepository);
+
     // ログイン状態を把握する
     useEffect(() => {
-        const userRepository =  new UserRepository();
-        const loginConfirmUserService = new LoginConfirmUserService(userRepository);
         // ログイン状態を更新する
         loginConfirmUserService.execute().then(setIsLogin).catch(() => setIsLogin(false));
     }, []);
