@@ -21,14 +21,21 @@ import {GetQuizDetailsService} from "../application/quizdetails/GetQuizDetailsSe
 import {RegisterQuizDetailsService} from "../application/quizdetails/RegisterQuizDetailsService";
 import {DeleteQuizDetailsService} from "../application/quizdetails/DeleteQuizDetailsService";
 import {QuizDetailsDTO} from "../dto/QuizDetailsDTO";
+import {QuizDetailsAddModal} from "../componentsv2/QuizDetails/QuizDetailsAddModal";
 const QuizDetails: React.FC = () =>{
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [isLogin, setIsLogin] = useState(false)
-	const [isAddShowModal, setIsAddShowModal] = useState(false)
-	const [isEditShowModal, setIsEditShowModal] = useState(false)
+	const [isShowAddModal, setIsShowAddModal] = useState(false)
+	const [isShowEditModal, setIsShowEditModal] = useState(false)
 	const {quizTitle} = location.state || {quizTitle : []};
 	const [quizDetails, setQuizDetails] = useState<QuizDetailsDTO[]>([])
+	const [inputQuizWord, setInputQuizWord] = useState("")
+	const [inputAnswerCandidateNo1, setInputAnswerCandidateNo1] = useState("")
+	const [inputAnswerCandidateNo2, setInputAnswerCandidateNo2] = useState("")
+	const [inputAnswerCandidateNo3, setInputAnswerCandidateNo3] = useState("")
+	const [inputAnswerCandidateNo4, setInputAnswerCandidateNo4] = useState("")
+	const [inputAnswerNumber, setInputAnswerNumber] = useState(1)
 	const userRepository =  new UserRepository();
 	const loginConfirmUserService = new LoginConfirmUserService(userRepository);
 	const quizDetailsRepository = new QuizDetailsRepository();
@@ -37,9 +44,12 @@ const QuizDetails: React.FC = () =>{
 	const quizDetailsRegisterService = new RegisterQuizDetailsService(quizDetailsRepository);
 	const quizDetailsDeleteService = new DeleteQuizDetailsService(quizDetailsRepository);
 
-	// ログイン状態を把握する
+	/**
+	* ログイン確認
+	* 済み(true)	: ログインステータスをログイン済みにする
+	* 未(false)	: トップ画面へリダイレクト
+	* */
 	useEffect(() => {
-		// ログインしていなければタイトル画面へリダイレクト
 		loginConfirmUserService.execute().then(res => {
 			if(!res){
 				redirectQuizTitle()
@@ -49,21 +59,112 @@ const QuizDetails: React.FC = () =>{
 		}).catch(() => redirectQuizTitle());
 	}, []);
 
-	// ログイン成功していれば、問題を取得する
+	/**
+	 * 問題を取得する
+	 * */
 	useEffect(() => {
 		if(isLogin){
-			console.log("logined")
-			// quizDetailsGetService.execute(quizTitle).then( res => {setQuizDetails(res)});
+			console.log(quizTitle.questionTitleId)
+			quizDetailsGetService.execute(quizTitle).then( res => {setQuizDetails(res)});
 		}
 	}, [isLogin]);
 
+	/**
+	 * デバッグよう
+	 * */
+	useEffect(() => {
+		console.log(quizDetails)
+	}, [quizDetails]);
+
+
+	/**
+	 * トップ画面リダイレクト
+	 * */
 	const redirectQuizTitle = () => {
 		navigate("/")
 	}
 
+	/**
+	 * 問題追加モーダルを表示
+	 * */
+	const handleShowAddModal = () => {
+		setIsShowAddModal(true);
+	};
+
+	/**
+	 * 問題追加モーダルを非表示
+	 * */
+	const handleCloseAddModal = () => {
+		setIsShowAddModal(false);
+	};
+
+	/**
+	 * 問題追加入力時の内容を反映する
+	 * */
+	const handleChangeInputQuizWord = (event: any) => {
+		setInputQuizWord(event.target.value)
+	}
+	const handleChangeInputAnswerCandidateNo1 = (event: any) => {
+		setInputAnswerCandidateNo1(event.target.value)
+	}
+	const handleChangeInputAnswerCandidateNo2 = (event: any) => {
+		setInputAnswerCandidateNo2(event.target.value)
+	}
+	const handleChangeInputAnswerCandidateNo3 = (event: any) => {
+		setInputAnswerCandidateNo3(event.target.value)
+	}
+	const handleChangeInputAnswerCandidateNo4 = (event: any) => {
+		setInputAnswerCandidateNo4(event.target.value)
+	}
+	const handleChangeInputAnswerNumber = (event: any) => {
+		setInputAnswerNumber(event.target.value)
+	}
+
+	/**
+	 * 問題追加処理
+	 * */
+	const handleAddQuizDetails= () => {
+		const mockQuestionDetailsId : number = 1;
+		quizDetailsRegisterService.execute(
+			mockQuestionDetailsId,
+			quizTitle.questionTitleId,
+			inputQuizWord,
+			inputAnswerCandidateNo1,
+			inputAnswerCandidateNo2,
+			inputAnswerCandidateNo3,
+			inputAnswerCandidateNo4,
+			inputAnswerNumber
+		).catch(() => { console.log("Add Title ERROR") });
+		handleCloseAddModal();
+		window.location.reload(); //サイトを更新して問題情報をサーバと同期する
+	}
+
 	return (
 		<>
-			hoge
+			<h1>MyEnglish QuizDetails</h1>
+			{quizDetails.length > 0 ? quizDetails.map((quizDetails: QuizDetailsDTO, index: number) => (
+					<p>hoge</p>
+				)) :
+				<p>問題を追加しよう!</p>
+			}
+			<QuizDetailsAddModal
+				isShowModal={isShowAddModal}
+				handleCloseModal={handleCloseAddModal}
+				handleAddQuizDetails={handleAddQuizDetails}
+				inputQuizWord={inputQuizWord}
+				handleInputQuizWord={handleChangeInputQuizWord}
+				inputAnswerCandidateNo1={inputAnswerCandidateNo1}
+				handleChangeInputAnswerCandidateNo1={handleChangeInputAnswerCandidateNo1}
+				inputAnswerCandidateNo2={inputAnswerCandidateNo2}
+				handleChangeInputAnswerCandidateNo2={handleChangeInputAnswerCandidateNo2}
+				inputAnswerCandidateNo3={inputAnswerCandidateNo3}
+				handleChangeInputAnswerCandidateNo3={handleChangeInputAnswerCandidateNo3}
+				inputAnswerCandidateNo4={inputAnswerCandidateNo4}
+				handleChangeInputAnswerCandidateNo4={handleChangeInputAnswerCandidateNo4}
+				inputAnswerNumber={inputAnswerNumber}
+				handleChangeInputAnswerNumber={handleChangeInputAnswerNumber}
+			/>
+			<button className="save-button" onClick={handleShowAddModal}>設問を追加</button>
 		</>
 	)
 

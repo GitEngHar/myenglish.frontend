@@ -1,6 +1,6 @@
 export type QuizDetailsDTO = {
-    questionDetailsID: number,
-    questionTitleID: number,
+    questionDetailsId: number,
+    questionTitleId: number,
     questionWord: string,
     answerCandidateNo1: string,
     answerCandidateNo2: string,

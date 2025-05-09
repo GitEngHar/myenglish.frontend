@@ -88,9 +88,9 @@ const QuizTitle: React.FC = () => {
     };
 
     const handleAddTitle = () => {
-        const newQuestionTitleId : number = 1;
-        const newQwnerUserId : number =1;
-        quizTitleRegisterService.execute(newQuestionTitleId,newQwnerUserId,addInputTitle).catch(() => { console.log("Add Title ERROR") });
+        const mockQuestionTitleId : number = 1;
+        const mockQwnerUserId : number =1;
+        quizTitleRegisterService.execute(mockQuestionTitleId,mockQwnerUserId,addInputTitle).catch(() => { console.log("Add Title ERROR") });
         setIsShowModal(false);
         window.location.reload(); //サイトを更新して問題情報をサーバと同期する
     };
@@ -107,7 +107,7 @@ const QuizTitle: React.FC = () => {
     }
 
     const handleRedirectQuizDetails = (quizTitle: QuizTitleDTO) => {
-        navigate("/quizdetails",{state: {questionTitle:quizTitle}})
+        navigate("/quizdetails",{state: {quizTitle:quizTitle}})
     }
 
     return (

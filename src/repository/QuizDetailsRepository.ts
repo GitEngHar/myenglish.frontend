@@ -6,6 +6,7 @@ import {QuizDetailsDTO} from "../dto/QuizDetailsDTO";
 export interface IQuizDetailsRepository {
     get(quizTitleDTO:QuizTitleDTO): Promise<QuizDetailsDTO[]>
     add(quizDetails:QuizDetails): Promise<void>
+    save(quizDetailsDTO: QuizDetailsDTO): Promise<void>
     update(quizDetails:QuizDetails): Promise<void>
     delete(quizDetails:QuizDetails): Promise<void>
 }
@@ -23,12 +24,12 @@ export class QuizDetailsRepository {
         return response.json()
     }
     // TODO: /quizdetails/addに変更する
-    async save(quizDetails:QuizDetails): Promise<void> {
+    async save(quizDetailsDTO:QuizDetailsDTO): Promise<void> {
         await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/quizdetailsrest/save`,{
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(quizDetails),
+            body: JSON.stringify(quizDetailsDTO),
         })
     }
     // TODO: /quizdetails/updateに変更する

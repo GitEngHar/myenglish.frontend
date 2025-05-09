@@ -1,6 +1,5 @@
 import React from "react";
-// TODO: Propsをオブジェクト定義する
-// TODO: AddInput->Inputに修正する
+
 export const QuizTitleModal = (props :any) => {
     const {isShowModal,handleCloseModal,handleAddTitle,addInputTitle,handleChangeAddTitle} = props;
 
