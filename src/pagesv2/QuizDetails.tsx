@@ -22,6 +22,7 @@ import {RegisterQuizDetailsService} from "../application/quizdetails/RegisterQui
 import {DeleteQuizDetailsService} from "../application/quizdetails/DeleteQuizDetailsService";
 import {QuizDetailsDTO} from "../dto/QuizDetailsDTO";
 import {QuizDetailsAddModal} from "../componentsv2/QuizDetails/QuizDetailsAddModal";
+import {QuizDetailsView} from "../componentsv2/QuizDetails/QuizDetailsView";
 const QuizDetails: React.FC = () =>{
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -142,8 +143,12 @@ const QuizDetails: React.FC = () =>{
 	return (
 		<>
 			<h1>MyEnglish QuizDetails</h1>
-			{quizDetails.length > 0 ? quizDetails.map((quizDetails: QuizDetailsDTO, index: number) => (
-					<p>hoge</p>
+			{quizDetails.length > 0 ? quizDetails.map((oneQuizDetails: QuizDetailsDTO, index: number) => (
+					<QuizDetailsView
+						oneQuizDetails={oneQuizDetails}
+						handleEditQuizDetails={() => {}}
+						handleDeleteQuizDetails={() => {}}
+					/>
 				)) :
 				<p>問題を追加しよう!</p>
 			}
