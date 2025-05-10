@@ -7,7 +7,7 @@ export const QuestionDetailsView = (props: any) => {
         handleEditClick,
         handleDeleteClick,
         handleGotoAIQuiz,
-        QuizDetailsView
+        goToTakeQuiz
     } = props;
     return (
         <>
