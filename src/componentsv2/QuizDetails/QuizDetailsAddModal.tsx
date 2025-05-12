@@ -5,22 +5,22 @@ type Props = {
     isShowModal: boolean
     handleCloseModal: any
     handleAddQuizDetails: any
-    inputQuizWord: any
-    handleInputQuizWord: any
-    inputAnswerCandidateNo1: any
-    handleChangeInputAnswerCandidateNo1: any
-    inputAnswerCandidateNo2: any
-    handleChangeInputAnswerCandidateNo2: any
-    inputAnswerCandidateNo3: any
-    handleChangeInputAnswerCandidateNo3: any
-    inputAnswerCandidateNo4: any
-    handleChangeInputAnswerCandidateNo4: any
-    inputAnswerNumber: any
-    handleChangeInputAnswerNumber: any
+    addQuizWord: any
+    handleAddQuizWord: any
+    addAnswerCandidateNo1: any
+    handleChangeAddAnswerCandidateNo1: any
+    addAnswerCandidateNo2: any
+    handleChangeAddAnswerCandidateNo2: any
+    addAnswerCandidateNo3: any
+    handleChangeAddAnswerCandidateNo3: any
+    addAnswerCandidateNo4: any
+    handleChangeAddAnswerCandidateNo4: any
+    addAnswerNumber: any
+    handleChangeAddAnswerNumber: any
 
 };
 
-export const QuizDetailsAddModal: React.FC<Props> = ({isShowModal,handleCloseModal,handleAddQuizDetails,inputQuizWord,handleInputQuizWord,inputAnswerCandidateNo1,handleChangeInputAnswerCandidateNo1,inputAnswerCandidateNo2,handleChangeInputAnswerCandidateNo2,inputAnswerCandidateNo3,handleChangeInputAnswerCandidateNo3,inputAnswerCandidateNo4,handleChangeInputAnswerCandidateNo4,inputAnswerNumber,handleChangeInputAnswerNumber}) => {
+export const QuizDetailsAddModal: React.FC<Props> = ({isShowModal,handleCloseModal,handleAddQuizDetails,addQuizWord,handleAddQuizWord,addAnswerCandidateNo1,handleChangeAddAnswerCandidateNo1,addAnswerCandidateNo2,handleChangeAddAnswerCandidateNo2,addAnswerCandidateNo3,handleChangeAddAnswerCandidateNo3,addAnswerCandidateNo4,handleChangeAddAnswerCandidateNo4,addAnswerNumber,handleChangeAddAnswerNumber}) => {
 
     const modalContent: React.CSSProperties  = {
         background: "white",
@@ -47,18 +47,18 @@ export const QuizDetailsAddModal: React.FC<Props> = ({isShowModal,handleCloseMod
             <>
                 <div id="overray" style={overlay}>
                     <div id="modalContent" style={modalContent}>
-                        <input placeholder="設問を入力してください" value={inputQuizWord} data-key="questionWord"
-                               onChange={handleInputQuizWord}></input>
-                        <input placeholder="回答候補1" value={inputAnswerCandidateNo1} data-key="answerCandidateNo1"
-                               onChange={handleChangeInputAnswerCandidateNo1}></input>
-                        <input placeholder="回答候補2" value={inputAnswerCandidateNo2} data-key="answerCandidateNo2"
-                               onChange={handleChangeInputAnswerCandidateNo2}></input>
-                        <input placeholder="回答候補3" value={inputAnswerCandidateNo3} data-key="answerCandidateNo3"
-                               onChange={handleChangeInputAnswerCandidateNo3}></input>
-                        <input placeholder="回答候補4" value={inputAnswerCandidateNo4} data-key="answerCandidateNo4"
-                               onChange={handleChangeInputAnswerCandidateNo4}></input>
-                        <input placeholder="答えの番号を入力" data-key="answerNumber" value={inputAnswerNumber}
-                               onChange={handleChangeInputAnswerNumber}></input>
+                        <input placeholder="設問を入力してください" value={addQuizWord} data-key="questionWord"
+                               onChange={handleAddQuizWord}></input>
+                        <input placeholder="回答候補1" value={addAnswerCandidateNo1} data-key="answerCandidateNo1"
+                               onChange={handleChangeAddAnswerCandidateNo1}></input>
+                        <input placeholder="回答候補2" value={addAnswerCandidateNo2} data-key="answerCandidateNo2"
+                               onChange={handleChangeAddAnswerCandidateNo2}></input>
+                        <input placeholder="回答候補3" value={addAnswerCandidateNo3} data-key="answerCandidateNo3"
+                               onChange={handleChangeAddAnswerCandidateNo3}></input>
+                        <input placeholder="回答候補4" value={addAnswerCandidateNo4} data-key="answerCandidateNo4"
+                               onChange={handleChangeAddAnswerCandidateNo4}></input>
+                        <input placeholder="答えの番号を入力" data-key="answerNumber" value={addAnswerNumber}
+                               onChange={handleChangeAddAnswerNumber}></input>
                         <button className="save-button" onClick={handleAddQuizDetails}>保存</button>
                         <button className="delete-button" onClick={handleCloseModal}>閉じる</button>
                     </div>

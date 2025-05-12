@@ -23,6 +23,7 @@ import {DeleteQuizDetailsService} from "../application/quizdetails/DeleteQuizDet
 import {QuizDetailsDTO} from "../dto/QuizDetailsDTO";
 import {QuizDetailsAddModal} from "../componentsv2/QuizDetails/QuizDetailsAddModal";
 import {QuizDetailsView} from "../componentsv2/QuizDetails/QuizDetailsView";
+import {QuizDetailsEditModal} from "../componentsv2/QuizDetails/QuizDetailsEditModal";
 const QuizDetails: React.FC = () =>{
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -31,12 +32,22 @@ const QuizDetails: React.FC = () =>{
 	const [isShowEditModal, setIsShowEditModal] = useState(false)
 	const {quizTitle} = location.state || {quizTitle : []};
 	const [quizDetails, setQuizDetails] = useState<QuizDetailsDTO[]>([])
-	const [inputQuizWord, setInputQuizWord] = useState("")
-	const [inputAnswerCandidateNo1, setInputAnswerCandidateNo1] = useState("")
-	const [inputAnswerCandidateNo2, setInputAnswerCandidateNo2] = useState("")
-	const [inputAnswerCandidateNo3, setInputAnswerCandidateNo3] = useState("")
-	const [inputAnswerCandidateNo4, setInputAnswerCandidateNo4] = useState("")
-	const [inputAnswerNumber, setInputAnswerNumber] = useState(1)
+	const [editOneQuizDetails, setEditOneQuizDetails] = useState<QuizDetailsDTO>({
+		questionDetailsId : 0,
+		questionTitleId : quizTitle.questionTitleId,
+		questionWord : "",
+		answerCandidateNo1 : "",
+		answerCandidateNo2 : "",
+		answerCandidateNo3 : "",
+		answerCandidateNo4 : "",
+		answerNumber: 0
+	})
+	const [addQuizWord, setAddQuizWord] = useState("")
+	const [addAnswerCandidateNo1, setAddAnswerCandidateNo1] = useState("")
+	const [addAnswerCandidateNo2, setAddAnswerCandidateNo2] = useState("")
+	const [addAnswerCandidateNo3, setAddAnswerCandidateNo3] = useState("")
+	const [addAnswerCandidateNo4, setAddAnswerCandidateNo4] = useState("")
+	const [addAnswerNumber, setAddAnswerNumber] = useState(1)
 	const userRepository =  new UserRepository();
 	const loginConfirmUserService = new LoginConfirmUserService(userRepository);
 	const quizDetailsRepository = new QuizDetailsRepository();
@@ -71,14 +82,6 @@ const QuizDetails: React.FC = () =>{
 	}, [isLogin]);
 
 	/**
-	 * デバッグよう
-	 * */
-	useEffect(() => {
-		console.log(quizDetails)
-	}, [quizDetails]);
-
-
-	/**
 	 * トップ画面リダイレクト
 	 * */
 	const redirectQuizTitle = () => {
@@ -101,24 +104,25 @@ const QuizDetails: React.FC = () =>{
 
 	/**
 	 * 問題追加入力時の内容を反映する
+	 * 問題追加の初期状態は空
 	 * */
-	const handleChangeInputQuizWord = (event: any) => {
-		setInputQuizWord(event.target.value)
+	const handleChangeAddQuizWord = (event: any) => {
+		setAddQuizWord(event.target.value)
 	}
-	const handleChangeInputAnswerCandidateNo1 = (event: any) => {
-		setInputAnswerCandidateNo1(event.target.value)
+	const handleChangeAddAnswerCandidateNo1 = (event: any) => {
+		setAddAnswerCandidateNo1(event.target.value)
 	}
-	const handleChangeInputAnswerCandidateNo2 = (event: any) => {
-		setInputAnswerCandidateNo2(event.target.value)
+	const handleChangeAddAnswerCandidateNo2 = (event: any) => {
+		setAddAnswerCandidateNo2(event.target.value)
 	}
-	const handleChangeInputAnswerCandidateNo3 = (event: any) => {
-		setInputAnswerCandidateNo3(event.target.value)
+	const handleChangeAddAnswerCandidateNo3 = (event: any) => {
+		setAddAnswerCandidateNo3(event.target.value)
 	}
-	const handleChangeInputAnswerCandidateNo4 = (event: any) => {
-		setInputAnswerCandidateNo4(event.target.value)
+	const handleChangeAddAnswerCandidateNo4 = (event: any) => {
+		setAddAnswerCandidateNo4(event.target.value)
 	}
-	const handleChangeInputAnswerNumber = (event: any) => {
-		setInputAnswerNumber(event.target.value)
+	const handleChangeAddAnswerNumber = (event: any) => {
+		setAddAnswerNumber(event.target.value)
 	}
 
 	/**
@@ -129,16 +133,49 @@ const QuizDetails: React.FC = () =>{
 		quizDetailsRegisterService.execute(
 			mockQuestionDetailsId,
 			quizTitle.questionTitleId,
-			inputQuizWord,
-			inputAnswerCandidateNo1,
-			inputAnswerCandidateNo2,
-			inputAnswerCandidateNo3,
-			inputAnswerCandidateNo4,
-			inputAnswerNumber
+			addQuizWord,
+			addAnswerCandidateNo1,
+			addAnswerCandidateNo2,
+			addAnswerCandidateNo3,
+			addAnswerCandidateNo4,
+			addAnswerNumber
 		).catch(() => { console.log("Add Title ERROR") });
 		handleCloseAddModal();
 		window.location.reload(); //サイトを更新して問題情報をサーバと同期する
 	}
+
+	const handleEditQuizDetails = (editedOneQuizDetails: QuizDetailsDTO) => {
+		setEditOneQuizDetails(editedOneQuizDetails)
+		editShowModal()
+	}
+
+	/**
+	 * 問題編集時の内容を反映する
+	 * 問題追加の初期状態は編集対象の問題
+	 * */
+	const handleChangeEditOneQuizDetails = (event: any) => {
+		const editQuizDetailsElement=event.target.getAttribute("data-key");
+		setEditOneQuizDetails((prevDetail) => ({
+			...prevDetail,
+			[editQuizDetailsElement]:event.target.value
+		}))
+	}
+
+	/**
+	 * 問題編集モーダルを表示
+	 * */
+	const editShowModal = () => {
+		setIsShowEditModal(true)
+	}
+	/**
+	 * 問題編集モーダルを非表示
+	 * */
+	const handleEditCloseModal = () => {
+		setIsShowEditModal(false)
+	}
+
+
+
 
 	return (
 		<>
@@ -146,9 +183,10 @@ const QuizDetails: React.FC = () =>{
 			{quizDetails.length > 0 ? quizDetails.map((oneQuizDetails: QuizDetailsDTO, index: number) => (
 					<QuizDetailsView
 						oneQuizDetails={oneQuizDetails}
-						handleEditQuizDetails={() => {}}
+						handleEditQuizDetails={handleEditQuizDetails}
 						handleDeleteQuizDetails={() => {}}
 					/>
+
 				)) :
 				<p>問題を追加しよう!</p>
 			}
@@ -156,19 +194,25 @@ const QuizDetails: React.FC = () =>{
 				isShowModal={isShowAddModal}
 				handleCloseModal={handleCloseAddModal}
 				handleAddQuizDetails={handleAddQuizDetails}
-				inputQuizWord={inputQuizWord}
-				handleInputQuizWord={handleChangeInputQuizWord}
-				inputAnswerCandidateNo1={inputAnswerCandidateNo1}
-				handleChangeInputAnswerCandidateNo1={handleChangeInputAnswerCandidateNo1}
-				inputAnswerCandidateNo2={inputAnswerCandidateNo2}
-				handleChangeInputAnswerCandidateNo2={handleChangeInputAnswerCandidateNo2}
-				inputAnswerCandidateNo3={inputAnswerCandidateNo3}
-				handleChangeInputAnswerCandidateNo3={handleChangeInputAnswerCandidateNo3}
-				inputAnswerCandidateNo4={inputAnswerCandidateNo4}
-				handleChangeInputAnswerCandidateNo4={handleChangeInputAnswerCandidateNo4}
-				inputAnswerNumber={inputAnswerNumber}
-				handleChangeInputAnswerNumber={handleChangeInputAnswerNumber}
+				addQuizWord={addQuizWord}
+				handleAddQuizWord={handleChangeAddQuizWord}
+				addAnswerCandidateNo1={addAnswerCandidateNo1}
+				handleChangeAddAnswerCandidateNo1={handleChangeAddAnswerCandidateNo1}
+				addAnswerCandidateNo2={addAnswerCandidateNo2}
+				handleChangeAddAnswerCandidateNo2={handleChangeAddAnswerCandidateNo2}
+				addAnswerCandidateNo3={addAnswerCandidateNo3}
+				handleChangeAddAnswerCandidateNo3={handleChangeAddAnswerCandidateNo3}
+				addAnswerCandidateNo4={addAnswerCandidateNo4}
+				handleChangeAddAnswerCandidateNo4={handleChangeAddAnswerCandidateNo4}
+				addAnswerNumber={addAnswerNumber}
+				handleChangeAddAnswerNumber={handleChangeAddAnswerNumber}
 			/>
+			<QuizDetailsEditModal
+				isShowModal={isShowEditModal}
+				handleCloseModal={handleEditCloseModal}
+				editOneQuizDetails={editOneQuizDetails}
+				handleChangeEditOneQuizDetails = {handleChangeEditOneQuizDetails}
+				/>
 			<button className="save-button" onClick={handleShowAddModal}>設問を追加</button>
 		</>
 	)

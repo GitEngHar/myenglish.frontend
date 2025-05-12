@@ -1,7 +1,15 @@
 import React from "react";
+import {QuizDetailsDTO} from "../../dto/QuizDetailsDTO";
 
-export const QuizTitleModal = (props :any) => {
-    const {isShowModal,handleCloseModal,handleAddTitle,addInputTitle,handleChangeAddTitle} = props;
+//TODO: 型を最適化する
+type Props = {
+    isShowModal: boolean
+    handleCloseModal: any
+    editOneQuizDetails: QuizDetailsDTO
+    handleChangeEditOneQuizDetails: any
+};
+
+export const QuizDetailsEditModal: React.FC<Props> = ({isShowModal,handleCloseModal,editOneQuizDetails,handleChangeEditOneQuizDetails}) => {
 
     const modalContent: React.CSSProperties  = {
         background: "white",
@@ -25,15 +33,26 @@ export const QuizTitleModal = (props :any) => {
     //alert(viewElements)
     return(
         isShowModal ? (
-            <>
-                <div id="overray" style={overlay}>
-                    <div id="modalContent" style={modalContent}>
-                        <input placeholder="タイトルを入力" value={addInputTitle} onChange={handleChangeAddTitle}></input>
-                        <button className="save-button" onClick={(handleAddTitle)}>送信</button>
-                        <button className="delete-button" onClick={(handleCloseModal)}>閉じる</button>
+                <>
+                    <div id="overray" style={overlay}>
+                        <div id="modalContent" style={modalContent}>
+                            <input placeholder="設問を入力してください" value={editOneQuizDetails.questionWord} data-key="questionWord"
+                                   onChange={handleChangeEditOneQuizDetails}></input>
+                            <input placeholder="回答候補1" value={editOneQuizDetails.answerCandidateNo1} data-key="answerCandidateNo1"
+                                   onChange={handleChangeEditOneQuizDetails}></input>
+                            <input placeholder="回答候補2" value={editOneQuizDetails.answerCandidateNo2} data-key="answerCandidateNo2"
+                                   onChange={handleChangeEditOneQuizDetails}></input>
+                            <input placeholder="回答候補3" value={editOneQuizDetails.answerCandidateNo3} data-key="answerCandidateNo3"
+                                   onChange={handleChangeEditOneQuizDetails}></input>
+                            <input placeholder="回答候補4" value={editOneQuizDetails.answerCandidateNo4} data-key="answerCandidateNo4"
+                                   onChange={handleChangeEditOneQuizDetails}></input>
+                            <input placeholder="答えの番号を入力" data-key="answerNumber" value={editOneQuizDetails.answerNumber}
+                                   onChange={handleChangeEditOneQuizDetails}></input>
+                            <button className="save-button" onClick={handleCloseModal}>保存</button>
+                            <button className="delete-button" onClick={handleCloseModal}>閉じる</button>
+                        </div>
                     </div>
-                </div>
-            </>
+                </>
             ) :
             (
                 <></>
