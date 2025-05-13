@@ -144,16 +144,11 @@ const QuizDetails: React.FC = () =>{
 		window.location.reload(); //サイトを更新して問題情報をサーバと同期する
 	}
 
-	const handleEditQuizDetails = (editedOneQuizDetails: QuizDetailsDTO) => {
-		setEditOneQuizDetails(editedOneQuizDetails)
-		editShowModal()
-	}
-
 	/**
 	 * 問題編集時の内容を反映する
 	 * 問題追加の初期状態は編集対象の問題
 	 * */
-	const handleChangeEditOneQuizDetails = (event: any) => {
+	const handleChangeOneQuizDetails = (event: any) => {
 		const editQuizDetailsElement=event.target.getAttribute("data-key");
 		setEditOneQuizDetails((prevDetail) => ({
 			...prevDetail,
@@ -162,29 +157,73 @@ const QuizDetails: React.FC = () =>{
 	}
 
 	/**
+	 * 問題を編集するボタンの振る舞い
+	 * @editedOneQuizDetails 編集する問題
+	 * */
+	const handleEditQuizDetails = (editedOneQuizDetails: QuizDetailsDTO) => {
+		setEditOneQuizDetails(editedOneQuizDetails)
+		editShowModal()
+	}
+
+	/**
+	 * 問題を削除するボタンの振る舞い
+	 * */
+	const handleDeleteQuizDetails = (deleteOneQuizDetails: QuizDetailsDTO) => {
+		// TODO: 将来的に画面更新だとレンダリング負荷が高くなりそうなので、表示値変更で値更新としたい
+		quizDetailsDeleteService.execute(deleteOneQuizDetails).catch(() => {console.log("問題の削除でエラーが発生しました")})
+		window.location.reload();
+	}
+
+
+	/**
+	 * 保存ボタンの振る舞い
+	 * 編集された内容をDBに登録する
+	 * */
+	const handleUpdateOneQuizDetails = () => {
+		quizDetailsUpdateService.execute(editOneQuizDetails).catch(() => {console.log("問題の更新でエラーが発生しました")})
+		editCloseModal()
+		// TODO: 将来的に画面更新だとレンダリング負荷が高くなりそうなので、表示値変更で値更新としたい
+		// 問題タイトルと異なる変更方法。モーダルで値を更新する場合は画面更新とする。
+		window.location.reload();
+	}
+
+	/**
 	 * 問題編集モーダルを表示
 	 * */
 	const editShowModal = () => {
 		setIsShowEditModal(true)
 	}
+
 	/**
 	 * 問題編集モーダルを非表示
 	 * */
-	const handleEditCloseModal = () => {
-		setIsShowEditModal(false)
+	const handleCancelEditModal = () => {
+		const initQuizDetailsDTO: QuizDetailsDTO = {
+			questionDetailsId : 0,
+			questionTitleId : quizTitle.questionTitleId,
+			questionWord : "",
+			answerCandidateNo1 : "",
+			answerCandidateNo2 : "",
+			answerCandidateNo3 : "",
+			answerCandidateNo4 : "",
+			answerNumber: 0
+		};
+		setEditOneQuizDetails(initQuizDetailsDTO)
+		editCloseModal()
 	}
 
-
-
+	const editCloseModal = () => {
+		setIsShowEditModal(false)
+	}
 
 	return (
 		<>
 			<h1>MyEnglish QuizDetails</h1>
-			{quizDetails.length > 0 ? quizDetails.map((oneQuizDetails: QuizDetailsDTO, index: number) => (
+			{quizDetails.length > 0 ? quizDetails.map((oneQuizDetails: QuizDetailsDTO) => (
 					<QuizDetailsView
 						oneQuizDetails={oneQuizDetails}
 						handleEditQuizDetails={handleEditQuizDetails}
-						handleDeleteQuizDetails={() => {}}
+						handleDeleteQuizDetails={handleDeleteQuizDetails}
 					/>
 
 				)) :
@@ -209,9 +248,10 @@ const QuizDetails: React.FC = () =>{
 			/>
 			<QuizDetailsEditModal
 				isShowModal={isShowEditModal}
-				handleCloseModal={handleEditCloseModal}
+				handleUpdateOneQuizDetails = {handleUpdateOneQuizDetails}
+				handleCancelEditModal={handleCancelEditModal}
 				editOneQuizDetails={editOneQuizDetails}
-				handleChangeEditOneQuizDetails = {handleChangeEditOneQuizDetails}
+				handleChangeOneQuizDetails = {handleChangeOneQuizDetails}
 				/>
 			<button className="save-button" onClick={handleShowAddModal}>設問を追加</button>
 		</>

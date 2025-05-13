@@ -7,8 +7,8 @@ export interface IQuizDetailsRepository {
     get(quizTitleDTO:QuizTitleDTO): Promise<QuizDetailsDTO[]>
     add(quizDetails:QuizDetails): Promise<void>
     save(quizDetailsDTO: QuizDetailsDTO): Promise<void>
-    update(quizDetails:QuizDetails): Promise<void>
-    delete(quizDetails:QuizDetails): Promise<void>
+    update(quizDetailsDTO:QuizDetailsDTO): Promise<void>
+    delete(quizDetailsDTO:QuizDetailsDTO): Promise<void>
 }
 
 export class QuizDetailsRepository {
@@ -33,21 +33,21 @@ export class QuizDetailsRepository {
         })
     }
     // TODO: /quizdetails/updateに変更する
-    async update(quizDetails:QuizDetails): Promise<void> {
+    async update(quizDetailsDTO:QuizDetailsDTO): Promise<void> {
         await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/quizdetailsrest/update`,{
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(quizDetails),
+            body: JSON.stringify(quizDetailsDTO),
         })
     }
     // TODO: /quizdetails/deleteに変更する
-    async delete(quizDetails:QuizDetails): Promise<void>{
+    async delete(quizDetailsDTO:QuizDetailsDTO): Promise<void>{
         await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/quizdetailsrest/delete`,{
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(quizDetails),
+            body: JSON.stringify(quizDetailsDTO),
         })
     }
 }
