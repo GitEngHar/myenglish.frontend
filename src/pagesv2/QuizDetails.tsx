@@ -33,14 +33,14 @@ const QuizDetails: React.FC = () =>{
 	const {quizTitle} = location.state || {quizTitle : []};
 	const [quizDetails, setQuizDetails] = useState<QuizDetailsDTO[]>([])
 	const [editOneQuizDetails, setEditOneQuizDetails] = useState<QuizDetailsDTO>({
-		questionDetailsId : 0,
+		questionDetailsId : 1,
 		questionTitleId : quizTitle.questionTitleId,
 		questionWord : "",
 		answerCandidateNo1 : "",
 		answerCandidateNo2 : "",
 		answerCandidateNo3 : "",
 		answerCandidateNo4 : "",
-		answerNumber: 0
+		answerNumber: 1
 	})
 	const [addQuizWord, setAddQuizWord] = useState("")
 	const [addAnswerCandidateNo1, setAddAnswerCandidateNo1] = useState("")
@@ -216,17 +216,25 @@ const QuizDetails: React.FC = () =>{
 		setIsShowEditModal(false)
 	}
 
+	const handleRedirectQuizTry = () => {
+		navigate('/takequiz/',{state : {allQuestionDetails : [...quizDetails]}})
+	}
+
 	return (
 		<>
 			<h1>MyEnglish QuizDetails</h1>
-			{quizDetails.length > 0 ? quizDetails.map((oneQuizDetails: QuizDetailsDTO) => (
-					<QuizDetailsView
-						oneQuizDetails={oneQuizDetails}
-						handleEditQuizDetails={handleEditQuizDetails}
-						handleDeleteQuizDetails={handleDeleteQuizDetails}
-					/>
-
-				)) :
+			{quizDetails.length > 0 ?
+				<>
+					{quizDetails.map((oneQuizDetails: QuizDetailsDTO) => (
+						<QuizDetailsView
+							oneQuizDetails={oneQuizDetails}
+							handleEditQuizDetails={handleEditQuizDetails}
+							handleDeleteQuizDetails={handleDeleteQuizDetails}
+						/>
+					))}
+					<button className="start-button" onClick={handleRedirectQuizTry}>問題に挑戦</button>
+				</>
+				:
 				<p>問題を追加しよう!</p>
 			}
 			<QuizDetailsAddModal
@@ -248,11 +256,11 @@ const QuizDetails: React.FC = () =>{
 			/>
 			<QuizDetailsEditModal
 				isShowModal={isShowEditModal}
-				handleUpdateOneQuizDetails = {handleUpdateOneQuizDetails}
+				handleUpdateOneQuizDetails={handleUpdateOneQuizDetails}
 				handleCancelEditModal={handleCancelEditModal}
 				editOneQuizDetails={editOneQuizDetails}
-				handleChangeOneQuizDetails = {handleChangeOneQuizDetails}
-				/>
+				handleChangeOneQuizDetails={handleChangeOneQuizDetails}
+			/>
 			<button className="save-button" onClick={handleShowAddModal}>設問を追加</button>
 		</>
 	)
