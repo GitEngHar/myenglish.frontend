@@ -4,9 +4,9 @@ import {GetQuizTitleService} from "../application/quiztitle/GetQuizTitleService"
 import {UserRepository} from "../repository/UserRepository"
 import {QuizTitleRepository} from "../repository/QuizTitleRepository";
 import {QuizTitleDTO} from "../dto/QuizTitleDTO";
-import {QuizTitleView} from "../componentsv2/QuizTitle/QuizTitleView";
-import {QuizTitleEdit} from "../componentsv2/QuizTitle/QuizTitleEdit";
-import {QuizTitleModal} from "../componentsv2/QuizTitle/QuizTitleModal";
+import {QuizTitleView} from "../components/QuizTitle/QuizTitleView";
+import {QuizTitleEdit} from "../components/QuizTitle/QuizTitleEdit";
+import {QuizTitleModal} from "../components/QuizTitle/QuizTitleModal";
 import {RegisterQuizTitleService} from "../application/quiztitle/RegisterQuizTitleService";
 import {UpdateQuizTitleService} from "../application/quiztitle/UpdateQuizTitleService";
 import _ from "lodash";

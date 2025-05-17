@@ -5,8 +5,8 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {QuizDetailsDTO} from "../dto/QuizDetailsDTO";
 import {QuizTryJudge} from "../application/quiztry/QuizTryJudge";
 import _ from "lodash";
-import {QuizTryView} from "../componentsv2/QuizTry/QuizTryView";
-import {QuizCollectModal} from "../componentsv2/QuizTry/QuizCollectModal";
+import {QuizTryView} from "../components/QuizTry/QuizTryView";
+import {QuizCollectModal} from "../components/QuizTry/QuizCollectModal";
 
 const QuizTry: React.FC = () => {
     const navigate = useNavigate();
