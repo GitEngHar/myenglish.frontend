@@ -64,10 +64,10 @@ const QuizDetails: React.FC = () =>{
 	useEffect(() => {
 		loginConfirmUserService.execute().then(res => {
 			if(!res){
-				redirectQuizTitle()
-				return
+				redirectQuizTitle();
+				return;
 			}
-			setIsLogin(res)
+			setIsLogin(res);
 		}).catch(() => redirectQuizTitle());
 	}, []);
 
@@ -76,7 +76,6 @@ const QuizDetails: React.FC = () =>{
 	 * */
 	useEffect(() => {
 		if(isLogin){
-			console.log(quizTitle.questionTitleId)
 			quizDetailsGetService.execute(quizTitle).then( res => {setQuizDetails(res)});
 		}
 	}, [isLogin]);
@@ -217,7 +216,7 @@ const QuizDetails: React.FC = () =>{
 	}
 
 	const handleRedirectQuizTry = () => {
-		navigate('/takequiz/',{state : {allQuestionDetails : [...quizDetails]}})
+		navigate('/takequiz/',{state : {quizDetails : [...quizDetails]}})
 	}
 
 	return (
