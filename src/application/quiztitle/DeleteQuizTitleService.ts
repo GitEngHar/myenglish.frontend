@@ -1,11 +1,11 @@
 import {QuizTitleRepository} from "../../repository/QuizTitleRepository";
-import {QuizTitle} from "../../domain/QuizTitle";
+import {QuizTitleDTO} from "../../dto/QuizTitleDTO";
 
 export class DeleteQuizTitleService{
     constructor(
         private quizTitleRepository: QuizTitleRepository
     ) {}
-    async execute(quizTitle: QuizTitle): Promise<void> {
-        await this.quizTitleRepository.delete(quizTitle)
+    async execute(quizTitleDTO: QuizTitleDTO): Promise<void> {
+        await this.quizTitleRepository.delete(quizTitleDTO)
     }
 }

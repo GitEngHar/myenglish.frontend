@@ -1,6 +1,6 @@
 export class QuizDetails{
-    private readonly _questionDetailsID: number;
-    private readonly _questionTitleID: number;
+    private readonly _questionDetailsId : number;
+    private readonly _questionTitleId: number;
     private readonly _questionWord: string;
     private readonly _answerCandidateNo1: string;
     private readonly _answerCandidateNo2: string;
@@ -9,8 +9,8 @@ export class QuizDetails{
     private readonly _answerNumber: number;
 
     constructor(
-        questionDetailsID: number,
-        questionTitleID: number,
+        questionDetailsId: number,
+        questionTitleId: number,
         questionWord: string,
         answerCandidateNo1: string,
         answerCandidateNo2: string,
@@ -19,14 +19,14 @@ export class QuizDetails{
         answerNumber: number
     ) {
         /** validation */
-        if(0 >= questionDetailsID){
-            throw new Error("問題のIDは0以下は代入できません");
+        if(0 >= questionDetailsId){
+            throw new Error("問題のIdは0以下は代入できません");
         }
-        this._questionDetailsID=questionDetailsID
-        if(0 >= questionTitleID){
-            throw new Error("問題のタイトルIDは0以下は代入できません");
+        this._questionDetailsId=questionDetailsId
+        if(0 >= questionTitleId){
+            throw new Error("問題のタイトルIdは0以下は代入できません");
         }
-        this._questionTitleID=questionTitleID
+        this._questionTitleId=questionTitleId
         if(0 >= questionWord.length || this.isIllegalValue(questionWord)){
             throw new Error("問題に記号が含まれているか、問題が入力されていません");
         }
@@ -53,11 +53,11 @@ export class QuizDetails{
         this._answerNumber = answerNumber
     }
 
-    get questonDetailsID(): number{
-        return this._questionDetailsID
+    get questonDetailsId(): number{
+        return this._questionDetailsId
     }
-    get questionTitleID(): number{
-        return this._questionTitleID
+    get questionTitleId(): number{
+        return this._questionTitleId
     }
     get questionWord(): string{
         return this._questionWord

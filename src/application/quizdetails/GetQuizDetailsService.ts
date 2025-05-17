@@ -1,16 +1,17 @@
 import {QuizDetails} from "../../domain/QuizDetails";
 import {QuizDetailsRepository} from "../../repository/QuizDetailsRepository";
 import {QuizTitle} from "../../domain/QuizTitle";
+import {QuizDetailsDTO} from "../../dto/QuizDetailsDTO";
+import {QuizTitleDTO} from "../../dto/QuizTitleDTO";
 
 export class GetQuizDetailsService{
     constructor(
-        private quizTitle: QuizTitle,
         private quizDetailsRepository: QuizDetailsRepository
     ) {}
 
-    async execute(quizTitle:QuizTitle): Promise<QuizDetails> {
+    async execute(quizTitleDTO:QuizTitleDTO): Promise<QuizDetailsDTO[]> {
         // quizを取得する
-        const quizDetails : QuizDetails = await this.quizDetailsRepository.get(quizTitle)
+        const quizDetails : QuizDetailsDTO[] = await this.quizDetailsRepository.get(quizTitleDTO)
         // quizの存在判定
         if(!quizDetails){
             // TODO: クイズが存在しない場合は登録を促す仕様にする
