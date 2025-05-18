@@ -1,6 +1,6 @@
 # .github/workflows/eslint-check.yml
 
-name: ESLint Check on PR
+name: ESLint Check on Push
 
 on:
   push:
