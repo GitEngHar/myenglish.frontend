@@ -47,6 +47,7 @@ const QuizTry: React.FC = () => {
         if (0 >= quizDetails.length) {
             redirectQuizTitle();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     /**
