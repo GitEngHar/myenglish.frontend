@@ -1,6 +1,6 @@
 import {QuizDetailsDTO} from "../../dto/QuizDetailsDTO";
 
-export class QuizTryJudge{
+export class QuizTryJudgeService {
     collectAnswer(userAnswer: number, quizDetails: QuizDetailsDTO): boolean {
         return userAnswer == quizDetails.answerNumber;
     }
