@@ -4,7 +4,6 @@ name: ESLint Check on PR
 
 on:
   push:
-  pull_request:
 
 jobs:
   eslint:
