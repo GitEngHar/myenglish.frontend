@@ -34,7 +34,9 @@ const QuizTitle: React.FC = () => {
     useEffect(() => {
         // ログイン状態を更新する
         loginConfirmUserService.execute().then(setIsLogin).catch(() => setIsLogin(false));
-    }, []);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []);
 
     // ログイン成功していれば、タイトルを取得する
     useEffect(() => {
@@ -46,6 +48,7 @@ const QuizTitle: React.FC = () => {
                 }
             );
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLogin]);
 
     const handleRedirectLogin = () => {

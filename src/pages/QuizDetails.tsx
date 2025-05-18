@@ -58,6 +58,7 @@ const QuizDetails: React.FC = () =>{
 			}
 			setIsLogin(res);
 		}).catch(() => redirectQuizTitle());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	/**
@@ -67,6 +68,7 @@ const QuizDetails: React.FC = () =>{
 		if(isLogin){
 			quizDetailsGetService.execute(quizTitle).then( res => {setQuizDetails(res)});
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isLogin]);
 
 	/**
