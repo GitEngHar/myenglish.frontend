@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {LoginConfirmUserService} from "../application/user/LoginConfirmUserService";
-import {UserRepository} from "../repository/UserRepository"
 import {useLocation, useNavigate} from "react-router-dom";
-import {QuizDetailsDTO} from "../dto/QuizDetailsDTO";
-import {QuizTryJudge} from "../application/quiztry/QuizTryJudge";
 import _ from "lodash";
+import {QuizDetailsDTO} from "../dto/QuizDetailsDTO";
+import {UserRepository} from "../repository/UserRepository"
+import {LoginConfirmUserService} from "../application/user/LoginConfirmUserService";
+import {QuizTryJudgeService} from "../application/quiztry/QuizTryJudgeService";
 import {QuizTryView} from "../components/QuizTry/QuizTryView";
 import {QuizCollectModal} from "../components/QuizTry/QuizCollectModal";
 
@@ -26,7 +26,7 @@ const QuizTry: React.FC = () => {
         answerCandidateNo4 : "",
         answerNumber: 1
     })
-    const quizTryJudgeService = new QuizTryJudge();
+    const quizTryJudgeService = new QuizTryJudgeService();
     const userRepository =  new UserRepository();
     const loginConfirmUserService = new LoginConfirmUserService(userRepository);
 
