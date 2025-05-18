@@ -1,4 +1,3 @@
-import {QuizTitle} from "../domain/QuizTitle";
 import {QuizTitleDTO} from "../dto/QuizTitleDTO";
 
 export interface IQuizTitleRepository {

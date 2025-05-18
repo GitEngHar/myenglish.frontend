@@ -16,7 +16,7 @@ const QuizTry: React.FC = () => {
     const [tryQuizNumber, setTryQuizNumber] = useState<number>(0)
     const [userAnswer,setUserAnswer] = useState<number>(0);
     const [answerResult,setAnswerResult] = useState<string>("");
-    const [takeQuizDetails, setTakeQuizDetails] = useState<QuizDetailsDTO>({
+    const [takeQuizDetails] = useState<QuizDetailsDTO>({
         questionDetailsId : 1,
         questionTitleId : 1,
         questionWord : "",

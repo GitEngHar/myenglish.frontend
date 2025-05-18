@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 // import {useLocation} from "react-router-dom";
 // import BackToQuizDetails from "../components/BackToQuizDetails";
 // import {OpenAIService} from "../utils/OpenAIService";
 //
-// const AIQuiz: React.FC = () =>{
+const AIQuiz: React.FC = () =>{
+    return <></>
+}
 // 	const [input, setInput] = useState('');
 // 	const [response, setResponse] = useState('');
 // 	const [image, setImage] = useState<File | null>(null);
@@ -91,4 +93,4 @@ import React, { useState, useEffect } from 'react'
 //
 // }
 //
-// export default AIQuiz;
+export default AIQuiz;

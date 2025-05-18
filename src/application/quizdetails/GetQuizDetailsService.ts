@@ -1,6 +1,4 @@
-import {QuizDetails} from "../../domain/QuizDetails";
 import {QuizDetailsRepository} from "../../repository/QuizDetailsRepository";
-import {QuizTitle} from "../../domain/QuizTitle";
 import {QuizDetailsDTO} from "../../dto/QuizDetailsDTO";
 import {QuizTitleDTO} from "../../dto/QuizTitleDTO";
 
