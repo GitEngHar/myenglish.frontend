@@ -1,17 +1,14 @@
-import {QuizDetails} from "../domain/QuizDetails";
-import {QuizTitle} from "../domain/QuizTitle";
 import {QuizTitleDTO} from "../dto/QuizTitleDTO";
 import {QuizDetailsDTO} from "../dto/QuizDetailsDTO";
 
 export interface IQuizDetailsRepository {
     get(quizTitleDTO:QuizTitleDTO): Promise<QuizDetailsDTO[]>
-    add(quizDetails:QuizDetails): Promise<void>
     save(quizDetailsDTO: QuizDetailsDTO): Promise<void>
     update(quizDetailsDTO:QuizDetailsDTO): Promise<void>
     delete(quizDetailsDTO:QuizDetailsDTO): Promise<void>
 }
 
-export class QuizDetailsRepository {
+export class QuizDetailsRepository implements IQuizDetailsRepository{
     // TODO: /quizdetails/getに変更する
     // TODO: GETメソッドにする
     async get(quizTitleDTO:QuizTitleDTO): Promise<QuizDetailsDTO[]>{
