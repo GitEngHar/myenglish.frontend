@@ -1,5 +1,4 @@
-export class QuizDetails{
-    private readonly _questionDetailsId : number;
+export class QuizAI{
     private readonly _questionTitleId: number;
     private readonly _questionWord: string;
     private readonly _answerCandidateNo1: string;
@@ -9,7 +8,6 @@ export class QuizDetails{
     private readonly _answerNumber: number;
 
     constructor(
-        questionDetailsId: number,
         questionTitleId: number,
         questionWord: string,
         answerCandidateNo1: string,
@@ -19,10 +17,6 @@ export class QuizDetails{
         answerNumber: number
     ) {
         /** validation */
-        if(0 >= questionDetailsId){
-            throw new Error("問題のIdは0以下は代入できません");
-        }
-        this._questionDetailsId=questionDetailsId
         if(0 >= questionTitleId){
             throw new Error("問題のタイトルIdは0以下は代入できません");
         }
@@ -53,9 +47,6 @@ export class QuizDetails{
         this._answerNumber = answerNumber
     }
 
-    get questonDetailsId(): number{
-        return this._questionDetailsId
-    }
     get questionTitleId(): number{
         return this._questionTitleId
     }
